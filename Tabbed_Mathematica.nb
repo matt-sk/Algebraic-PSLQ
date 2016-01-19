@@ -1,0 +1,105 @@
+PSLQ2[x_, Q_, IT_: 500, PR_: 100] :=  Module[{n, gam, A, B, H, s, t, y, i, j, k, r, mx, tp, d, T, M, m, it},
+    
+    n = Length[x]; 
+    gam = Sqrt[4/3];
+    A = B = IdentityMatrix[n];
+    s = Table[Sqrt[Sum[x[[i]]^2, {i, k, n}]], {k, 1, n}];
+    y = x/s[[1]]; 
+    s = s/s[[1]];
+    H = Table[Table[0, {j, 1, n - 1}], {j, 1, n}];
+    
+    For[i = 1, i < n, i++, 
+        H[[i, i]] = s[[i + 1]]/s[[i]]
+    ];
+    
+    For[i = 1, i <= n, i++, 
+        For[j = 1, j < i, j++, 
+            H[[i, j]] = -y[[i]] y[[j]]/s[[j]]/s[[j + 1]]
+        ]
+    ];
+        
+    For[i = 2, i <= n, i++, 
+        For[j = i - 1, j >= 1, j--, 
+            t = Round[Re[H[[i, j]]/H[[j, j]]]] + Round[Im[H[[i, j]]/H[[j, j]]]/Sqrt[Q]] Sqrt[-Q]; 
+            y[[j]] += t y[[i]];
+            
+            For[k = 1, k <= j, k++, 
+                H[[i, k]] -= t H[[j, k]]
+            ]; 
+            
+            For[k == 1, k <= n, k++, 
+                A[[i, k]] -= t A[[j, k]];
+                B[[k, j]] += t B[[k, i]]
+            ]
+        ]
+    ];
+    
+    it = 0; 
+    While[ Min[Abs[y]] > 10^-PR && it < IT, it++; 
+        r = 1; 
+        mx = 0; 
+        For[i = 1, i < n, i++, 
+            If[gam^i Abs[H[[i, i]]] > mx, 
+                mx = gam^i Abs[H[[i, i]]]; 
+                r = i
+            ]
+        ];
+        
+        tp = y[[r]]; 
+        y[[r]] = y[[r + 1]]; 
+        y[[r + 1]] = tp;
+        
+        tp = A[[r]]; 
+        A[[r]] = A[[r + 1]]; 
+        A[[r + 1]] = tp;
+        
+        tp = H[[r]]; 
+        H[[r]] = H[[r + 1]]; 
+        H[[r + 1]] = tp;
+        
+        B = Transpose[B]; 
+        tp = B[[r]]; 
+        B[[r]] = B[[r + 1]]; 
+        B[[r + 1]] = tp; 
+        B = Transpose[B];
+        
+        T = {0, 0, 0, 0}; 
+        
+        If[r <= n - 2, 
+            
+            d = Sqrt[H[[r, r]]^2 + H[[r, r + 1]]^2]; 
+            T[[1]] = H[[r, r]]/d; 
+            T[[2]] = H[[r, r + 1]]/d; 
+            
+            For[i = r, i <= n, i++, 
+                T[[3]] = H[[i, r]]; 
+                T[[4]] = H[[i, r + 1]]; 
+                H[[i, r]] = T[[1]] T[[3]] + T[[2]] T[[4]]; 
+                H[[i, r + 1]] = -T[[2]] T[[3]] + T[[1]] T[[4]]
+            ]
+        ];
+        
+        For[i = r + 1, i <= n, i++, 
+            For[j = Min[i - 1, r + 1], j >= 1, j--, 
+                t = Round[Re[H[[i, j]]/H[[j, j]]]] + Round[Im[H[[i, j]]/H[[j, j]]]/Sqrt[Q]] Sqrt[-Q]; 
+                y[[j]] += t y[[i]]; 
+                
+                For[k = 1, k <= j, k++, 
+                    H[[i, k]] -= t H[[j, k]]
+                ];
+                
+                For[k = 1, k <= n, k++, 
+                    A[[i, k]] -= t A[[j, k]];
+                    B[[k, j]] += t B[[k, i]]
+                ]
+            ]
+        ];
+        
+        M = 1/Max[Table[Norm[N[H[[i]]]], {i, 1, n}]]
+    ]; 
+    
+    m = Min[Abs[y]];
+    If[m > 10^-PR, Print["No relation vector with norm less than ", M],
+    Print["Relation vector = ", Simplify[Transpose[B][[Position[Abs[y], m][[1, 1]]]]]]]
+
+]

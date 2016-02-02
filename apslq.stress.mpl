@@ -15,10 +15,28 @@ testA := fopen("StressExamples/testA.txt",READ):
 #parse( FileTools[Text][ReadLine]( test3 ) );
 #parse( FileTools[Text][ReadLine]( test4 ) );
 
-Broken;
-xx, p, Digits := op( parse( FileTools[Text][ReadLine]( test2 ) ) );
-xx := evalf(xx);    
+N := 2:
+for i from 1 to N do 
+    FileTools[Text][ReadLine]( test1 );
+    FileTools[Text][ReadLine]( test2 );
+    FileTools[Text][ReadLine]( test3 );
+    FileTools[Text][ReadLine]( test4 );
+    FileTools[Text][ReadLine]( testA );
+end do:
+
+#Broken;
+xx, p, Digits := op( parse( FileTools[Text][ReadLine]( test2 ) ) ):
+xx :=  evalf(xx);
 yy :=  parse( FileTools[Text][ReadLine]( testA ) );
+
+stop;
+
+#evalf(eval( APSLQ[aabs](APSLQ[Reduce](add( xx[i+1]*yy[i], i=1..nops(yy) ))) - xx[1],  aa[1] = sqrt(p) ));
+
+nops(xx); nops(yy);
+
+evalf(eval(xx[1],aa[1]=sqrt(p)));
+evalf(eval( add( xx[i+1]*yy[i], i=1..nops(yy) ), aa[1]=sqrt(p) ));
 
 #Working
 #Digits := 50;

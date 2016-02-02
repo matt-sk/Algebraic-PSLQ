@@ -58,7 +58,7 @@ Conj := proc( in_x::polynom, n::nonnegint, $)::polynom;
 local x, xc, t;
     
     if n = 0 then
-        return 1;
+        return in_x;
     end if;
     
     x  := expand(in_x);

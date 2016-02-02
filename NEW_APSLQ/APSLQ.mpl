@@ -28,8 +28,8 @@ tmp;
     for k from 1 to n do
         s[k] := add( expand(xx[j]*AlgConj(xx[j])), j=k..n);
         s[k] := expand( s[k] );
-#        s[k] := evalf( AlgSqrt( s[k] ) );
-        s[k] := evalf( sqrt(s[k]) );
+#        s[k] := evalf( sqrt(s[k]) );
+        s[k] := evalf( AlgSqrt(s[k]) );
     end do:
     s := convert(s, list);
         
@@ -99,8 +99,8 @@ tmp;
         
         #Remove corner on H diagonal
         if m <= n-2 then
-#            t[0] := AlgSqrt( H[m,m]*AlgConj(H[m,m]) + AlgConj(H[m,m+1])*H[m,m+1] );
-            t[0] := sqrt( H[m,m]*AlgConj(H[m,m]) + AlgConj(H[m,m+1])*H[m,m+1] );
+#            t[0] := sqrt( H[m,m]*AlgConj(H[m,m]) + AlgConj(H[m,m+1])*H[m,m+1] );
+            t[0] := AlgSqrt( H[m,m]*AlgConj(H[m,m]) + AlgConj(H[m,m+1])*H[m,m+1] );
             t[1] := AlgDivide( H[m,m], t[0] );
             t[2] := AlgDivide( H[m,m+1], t[0] );
             
@@ -140,7 +140,7 @@ tmp;
         miny, pos := ListTools[FindMinimalElement]( map( abs, map(AlgAbs,yy)), position );
 #this shows current level.
 tmp := convert( LinearAlgebra[Column]( B, pos ), list );
-lprint( evalf( AlgAbs(expand(add( xx[i]*tmp[i], i=1..nops(xx) ))) ) );
+#lprint( evalf( AlgAbs(expand(add( xx[i]*tmp[i], i=1..nops(xx) ))) ) );
         
         if AlgAbs( add( LinearAlgebra[Column]( B, pos )[i]*xx[i], i = 1.. nops(xx) ) ) < threshold then
             lprint( TotalIterations=ii );

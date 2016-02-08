@@ -1,6 +1,6 @@
 APSLQ := module()
 export APSLQ, SetAffix, Info;
-local term2mono, AlgSqrt, AlgCoeff, AlgAbs, AlgConj, AlgInvert, AlgDivide, AlgNearest, algbs, pp;
+local term2mono, AlgSqrt, AlgCoeff, AlgAbs, AlgConj, AlgInvert, AlgDivide, AlgNearest, algbs, pp, AlgSqrt2, GetAllAlgebraics;
       
 #Do not tab out $include's
 $include "APSLQ.mpl";

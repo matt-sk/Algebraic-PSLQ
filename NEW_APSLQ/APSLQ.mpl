@@ -27,6 +27,7 @@ tmp;
     
     for k from 1 to n do
         s[k] := add( expand(xx[j]*AlgConj(xx[j])), j=k..n);
+#        s[k] := add( expand(xx[j]*xx[j]), j=k..n);
         s[k] := expand( s[k] );
 #        s[k] := evalf( sqrt(s[k]) );
         s[k] := evalf( AlgSqrt(s[k]) );
@@ -41,7 +42,7 @@ tmp;
     end do:
     yy := convert(yy,list):
     s  := convert(s,list):
-    
+
     #Initialize H
     H := Matrix( n, n-1 ):
     for j from 1 to n-1 do

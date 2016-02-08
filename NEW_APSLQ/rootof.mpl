@@ -1,5 +1,53 @@
-AlgSqrt := proc( x::algebraic, $ )
-description "Find y::algebraic so that y^2 = x";
+AlgExpand := proc(x::algebraic, threshold::{float,fraction}, $)::algebraic;
+    return AlgTrim(expand(evalf(x,Digits)),threshold);
+end proc;
+
+
+AlgTrim := proc( x::algebraic, threshold::{float,fraction}, $ )::algebraic;
+#option trace;
+    agbs := GetAllAlgebraics(x);
+    pp   := [seq(a^2,a in agbs)];
+    ans  := 0;
+    
+    for i from 0 to 2^nops(pp)-1 do
+        t := AlgCoeff( x, term2mono(i,pp) );
+        if abs(t) <= threshold then
+            next;
+        end if;
+        ans := ans + t*term2mono(i,pp);
+    end do;
+    return ans;
+end proc;
+
+
+AlgSqrt := proc( x::algebraic )::algebraic;
+description "Numerical determine the square root of an algebraic number.";
+option trace;
+local agbs, pp, n, v, Vsqrd, i, sys, V;
+    
+    agbs := GetAllAlgebraics(x);
+    pp   := [seq(a^2,a in agbs)];
+    n    := nops(pp);
+    
+    if n = 0 then return sqrt(x); end if;
+    
+    V     := add( v[i]*term2mono(i,pp), i = 0..2^n-1 );
+    Vsqrd := expand( V^2 ):
+    
+    for i from 0 to 2^n-1 do
+        sys[i] := AlgCoeff( x, term2mono(i,pp) ) - AlgCoeff( Vsqrd, term2mono(i,pp) );
+    end do:
+    
+    sys := convert(sys,list);
+    #DO SOMEHTHING IF THIS FAILS
+    assign( fsolve(sys) );
+    
+    return add(v[i]*term2mono(i,pp), i=0..2^n-1);
+    
+end proc:
+
+AlgSqrt2 := proc( x::algebraic, $ )
+description "For x = x0 + x1 I only";
 #option trace;
 local agbs, p, w, v;
     
@@ -26,6 +74,7 @@ end proc:
 
 GetAllAlgebraics := proc( x )
 description "Hack for including i when it has a float coefficient";
+#option trace;
 local agbs;
     
     agbs := Algebraic[GetAlgebraics]( x );
@@ -40,10 +89,11 @@ local agbs;
 end proc;
 
 
-term2mono := proc(i::nonnegint, p::list(integer)) 
+term2mono := proc(i::nonnegint, pp::list(integer)) 
 description "Gives ith mononomial of [x1,x2,...,xn]";
 #option trace;
 local bd;
+    if nops(pp) = 0 then return 1; end if;
     bd := convert( i, base, 2 );
     `*`( seq( sqrt(pp[j])^bd[j],j=1..nops(bd)) );
 end proc:
@@ -60,6 +110,7 @@ local ans, x;
     
     ans := subs( seq(a=x, a in GetAllAlgebraics( V )), W);
     ans := coeff( ans, x, nops( GetAllAlgebraics( V ) ) );
+    
     return subs( seq(a=0, a in GetAllAlgebraics( W )), ans);
     
 end proc:
@@ -96,16 +147,18 @@ end proc:
 
 
 AlgInvert := proc( x::algebraic )::algebraic;
+#option trace;
 local d, n, agbs;
     
-    agbs := Algebraic[GetAlgebraics]( x );
+    agbs := GetAllAlgebraics( x );
+    n    := nops(agbs);
     
     if nops( agbs ) = 0 then
         return 1/x;
     end if;
     
     d := thisproc(expand(x*eval(x,agbs[1]=-agbs[1])));
-    return expand( n*d );
+    return expand( eval(x,agbs[1]=-agbs[1])*d );
     
 end proc:
 
@@ -119,13 +172,10 @@ AlgNearest := proc( a::algebraic )
 #option trace;
 local agbs, f, swp;
     
-    agbs := Algebraic[GetAlgebraics]( a );
+    agbs := GetAllAlgebraics( a );
+    if nops(agbs) = 0 then return round(a); end if;
     
-    if agbs = {} then
-        agbs := [I=x];
-    else
-        agbs := [seq(agbs[i-1]=x^i,i=2..nops(gbs)+1),I=x];
-    end if;
+    agbs := [seq(agbs[i-1]=x^i,i=2..nops(gbs)+1)];
     f    := eval( a, agbs );
     f    := add( round(coeff(f,x,i))*x^i,i=0..nops(agbs) );
     swp  := x -> rhs(x) = lhs(x);

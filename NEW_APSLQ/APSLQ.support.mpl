@@ -1,5 +1,5 @@
 APSLQ := module()
-export APSLQ, SetAffix, Info;
+export APSLQ, SetAffix, Info, AlgExpand, AlgTrm;
 local term2mono, AlgSqrt, AlgCoeff, AlgAbs, AlgConj, AlgInvert, AlgDivide, AlgNearest, algbs, pp, AlgSqrt2, GetAllAlgebraics;
       
 #Do not tab out $include's

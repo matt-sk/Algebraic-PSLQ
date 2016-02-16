@@ -5,6 +5,8 @@ end proc;
 
 AlgTrim := proc( x::algebraic, threshold::{float,fraction}, $ )::algebraic;
 #option trace;
+local agbs, pp, ans, i, t;
+    
     agbs := GetAllAlgebraics(x);
     pp   := [seq(a^2,a in agbs)];
     ans  := 0;
@@ -168,7 +170,26 @@ AlgDivide := proc( x::algebraic, y::algebraic )::algebraic;
 end proc;
 
 
-AlgNearest := proc( a::algebraic )
+AlgNearest := proc( x::complex, D::prime, $ )::algebraic;
+#option trace;
+local alpha, beta, a, b;
+    
+    if -D mod 4 <> 2 and -D mod 4 <> 3 then
+        warning("AlgNearest not yet implemented for D = 1 mod 4");
+    end if;
+    
+    alpha := Re(x);
+    beta  := Im(x);
+    
+    a := round( alpha );
+    b := round( beta/sqrt(D) );
+    
+    return a + b*sqrt(-D);
+    
+end proc:
+
+
+AlgNearest2 := proc( a::algebraic )
 #option trace;
 local agbs, f, swp;
     

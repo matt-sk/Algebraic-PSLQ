@@ -69,7 +69,7 @@ SETUP := proc( D::integer, coeffDigits::posint )
 	end if;
 
 	# Read in the APSLQ code.
-	origDir := currentdir( "../../Maple" ):
+	origDir := currentdir( "../Maple" ):
 	read "APSLQ.module.mpl";
 	currentdir( origDir ):
 

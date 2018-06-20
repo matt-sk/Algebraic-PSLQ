@@ -28,6 +28,8 @@ REDUCTION-TestSets := $(REDUCTION-TestSets:%=%-real-constants) # Only real const
 REDUCTION-TestSets := $(foreach c,$(COEFFICIENTS),$(REDUCTION-TestSets:%=%-${c}-coefficients))
 REDUCTION-TestSets := $(APSLQ-TestSets) $(REDUCTION-TestSets)
 
+# Note that REDUCTION-TestSets inherits the APSLQ-TestSets /before/ the PSLQ-TestSets are appended to the APSLQ-TestSets.
+# This is deliberate, and done so because it is pointless to use REDUCTION method when regular PSLQ can be used. The test scripts raise an error if we attempt to do otherwise.
 APSLQ-TestSets := $(PSLQ-TestSets) $(APSLQ-TestSets)
 
 
@@ -59,7 +61,7 @@ $(APSLQ-OutputFiles): TESTFILE=$(shell echo "$@" | sed 's/^Results\/Phase[12]\/\
 $(APSLQ-OutputFiles): INPUT_LENGTH=$(shell echo "$@" | sed 's/^.*-\([^-]*\)-input.*/\1/g')
 $(APSLQ-OutputFiles): GAMMA=$(shell echo "$@" | sed 's/^.*-\([^-]*\)-gamma.*/\1/g')
 $(APSLQ-OutputFiles): THRESHOLD=$(shell echo "$@" | sed 's/^.*-\([^-]*\)-threshold.*/\1/g')
-$(APSLQ-OutputFiles): stress-test-common.mpl stress-test-APSLQ.mpl $$(TESTFILE) ../../Maple/APSLQ.module.mpl  ../../Maple/APSLQ.mpl  ../../Maple/APSLQ.support.mpl
+$(APSLQ-OutputFiles): stress-test-common.mpl stress-test-APSLQ.mpl $$(TESTFILE) ../Maple/APSLQ.module.mpl
 	$(MAPLE) -q -c 'PHASE:=$(PHASE);' -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' -c 'INPUT_LENGTH:=$(INPUT_LENGTH);' -c "Gamma:='$(GAMMA)';" -c 'THRESHOLD:=$(THRESHOLD);' -c 'ITERATIONS:=10000;' stress-test-APSLQ.mpl
 
 $(PSLQ-OutputFiles): TESTFILE=$(shell echo "$@" | sed 's/^Results\/Phase[12]\/\(.*\)-PSLQ.*/Sets\/\1/g')

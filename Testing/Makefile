@@ -14,8 +14,9 @@ APSLQ-TestSets := $(foreach a,$(APSLQ-Affixes),Z[sqrt($(a))])
 APSLQ-TestSets := $(foreach c,$(CONSTANTS),$(APSLQ-TestSets:%=%-${c}-constants))
 APSLQ-TestSets := $(foreach c,$(COEFFICIENTS),$(APSLQ-TestSets:%=%-${c}-coefficients))
 
-PSLQ-TestSets := $(foreach a,$(PSLQ-Affixes),Z[sqrt(${a})])
-PSLQ-TestSets := $(foreach c,$(CONSTANTS),$(PSLQ-TestSets:%=%-${c}-constants))
+# PSLQ Special Case (I can't see a good way to automate this) 
+# -- Z[sqrt(1)] can only have real coefficients, while Z[sqrt(-1)] can have both real and complex coefficients.
+PSLQ-TestSets := Z[sqrt(-1)]-real-constants Z[sqrt(-1)]-complex-constants Z[sqrt(1)]-real-constants
 PSLQ-TestSets := $(foreach c,$(COEFFICIENTS),$(PSLQ-TestSets:%=%-${c}-coefficients))
 
 LLL-TestSets := $(foreach a,$(LLL-Affixes),Z[sqrt(${a})])

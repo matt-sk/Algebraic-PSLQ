@@ -18,8 +18,10 @@ $endif
 gamma_1 := proc( D::integer )
 	local discriminant, d;
 
-	discriminant := D mod 4;
-	if D < 0 then
+	if D in {0,1} then
+		return sqrt(4/(3));
+	elif D < 0 then
+		discriminant := D mod 4;
 		d := abs(D):
 		if discriminant = 1 then
 			return -4*sqrt(-(d^2-14*d+1)*d)/(d^2-14*d+1):

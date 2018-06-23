@@ -1,4 +1,4 @@
-table([consts=[Pi, Pi^2, Pi^3, Pi^4, Pi^5, Pi^6, Pi^7, Pi^8, Pi^9, exp(1), exp(2), exp(3), exp(4), exp(5), exp(6), exp(7), exp(8), exp(9), gamma, gamma^2, gamma^3, gamma^4, gamma^5, gamma^6, gamma^7, gamma^8, gamma^9, sin(1), sin(2), sin(3), sin(4), sin(5), sin(6), sin(7), sin(8), sin(9), ln(2), ln(3), ln(5), ln(7)], affix=1, digits=1])
+table([consts=[Pi, Pi^2, Pi^3, Pi^4, Pi^5, Pi^6, Pi^7, Pi^8, Pi^9, exp(1), exp(2), exp(3), exp(4), exp(5), exp(6), exp(7), exp(8), exp(9), gamma, gamma^2, gamma^3, gamma^4, gamma^5, gamma^6, gamma^7, gamma^8, gamma^9, sin(1), sin(2), sin(3), sin(4), sin(5), sin(6), sin(7), sin(8), sin(9), ln(2), ln(3), ln(5), ln(7)], affix=0, digits=1])
 table([id=1,coeffs=[-9, -7, 7, -5, 0, 1, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
 table([id=2,coeffs=[-9, -2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -4, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, -8, 0, 0, 0, -5]])
 table([id=3,coeffs=[-9, 0, 0, 0, 0, -6, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])

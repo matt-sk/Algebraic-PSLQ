@@ -1,6 +1,6 @@
 # Parameters
 Thresholds := epsilon epsilon_minus_3 maple
-Gammas := gamma_1 2.0
+Gammas := gamma_1 2.0 3.0
 
 # Generate the possible output files.
 Ph1-APSLQ-OutputFiles := $(APSLQ-TestSets:%=Results/Phase1/%-APSLQ)

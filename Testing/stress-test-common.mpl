@@ -19,10 +19,14 @@ $endif
 # -= These are function hooks that can be over-ridden by the scripts using this common framework                   =-
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 
+# Note that the calc input for many of these might be a vector or list (the calculated integer relation) or it might be FAIL if the calculation went awry somehow.
+# As such, it is not given an explicit type in any of the following function definitions.
+
 # The TEST() function needs to be set by the specific test script.
 # Note that this must be a function so the error is raised inside the try-catch block below.
 if not assigned( TEST ) then
 	TEST := proc( xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )
+		option inline:
 		error "TEST Function needs to be Redefined";
 	end proc;
 end if:
@@ -32,13 +36,15 @@ end if:
 # SETUP(): Function to run before processing to set up thigns that need setting up.
 if not assigned( SETUP ) then
 	SETUP := proc( D::integer, coeffDigits::posint )
+		option inline:
 	end proc:
 end if:
 
 # PRECHECK(): Function run before standard results checking is run.
-# This function must return GOOD, BAD, FAIL to report an outcome, or CONTINUE to allow further checking.
+# This function must return either CONTINUE to allow further checking, or one of GOOD, BAD, or FAIL to report an outcome.
 if not assigned( PRECHECK ) then
 	PRECHECK := proc( calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::boolean_constant;
+		option inline:
 		return CONTINUE;
 	end proc:
 end if:
@@ -47,6 +53,7 @@ end if:
 # result will be one of GOOD, BAD, FAIL, or UNEXPECTED
 if not assigned( EXTRAOUTPUT ) then
 	EXTRAOUTPUT := proc( result, calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::string;
+		option inline:
 		return "";
 	end proc:
 end if:
@@ -54,6 +61,7 @@ end if:
 # TIDYUP() : Function to run after all processing is complete.
 if not assigned( TIDYUP ) then
 	TIDYUP := proc()
+		option inline:
 	end proc:
 end if:
 
@@ -61,8 +69,10 @@ end if:
 # -= Utility function declaration.                                                                                 =-
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 
+# Note that the calc input for many of these might be a vector or list (the calculated integer relation) or it might be FAIL if the calculation went awry somehow.
+# As such, it is not given an explicit type in any of the following function definitions.
+
 # This function checks the result of a computation.
-# Note that calc needs to be anything, since APSLQ occasionally returns "FAIL" and we need to allow these bad values
 # To be passed in for testing.
 CHECK := proc( calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, ans::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )
 	local mult, XX1, rel;
@@ -75,7 +85,7 @@ CHECK := proc( calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(compl
 	# Check to see if the calculated relation is just an algebraic integer multiple of the known relation.
 	# To do this we calculte the multiple that turns ans[1] into calc[1] and multiply the entire ans list by this multiple.
 	# If the two lists are then the same, we found such a multiple of the known relation.
-	mult := expand(calc[1]*conjugate(ans[1]))/expand(ans[1]*conjugate(ans[1])):
+	mult := -calc[1]; # We know ans[1] = -1, so if calc = k*ans for some algebraic integer k, then k=-calc[1].
 	CHK := expand(calc-ans*mult):
 
 	if convert(CHK,set) = {0} then

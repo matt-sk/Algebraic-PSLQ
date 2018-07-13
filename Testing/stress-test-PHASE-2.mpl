@@ -58,41 +58,6 @@ if not assigned( TIDYUP ) then
 end if:
 
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
-# -= Utility function declaration.                                                                                 =-
-# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
-
-# This function checks the result of a computation.
-# Note that calc needs to be anything, since APSLQ occasionally returns "FAIL" and we need to allow these bad values
-# To be passed in for testing.
-CHECK := proc( calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, ans::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )
-	local mult, XX1, rel;
-	global CHK, GOOD, BAD, UNEXPECTED;
-
-	# Pre Check
-	CHK := PRECHECK( calc, xx, D, Precision ):
-	if CHK <> CONTINUE then return CHK fi:
-
-	# Check to see if the calculated relation is just an algebraic integer multiple of the known relation.
-	# To do this we calculte the multiple that turns ans[1] into calc[1] and multiply the entire ans list by this multiple.
-	# If the two lists are then the same, we found such a multiple of the known relation.
-	mult := expand(calc[1]*conjugate(ans[1]))/expand(ans[1]*conjugate(ans[1])):
-	CHK := expand(calc-ans*mult):
-
-	if convert(CHK,set) = {0} then
-	   return GOOD:
-	else
-		rel := expand( add( xx[k]*calc[k], k=1..nops(xx) ) ):
-		Digits := 1000;
-		CHK := abs( evalf[1000](rel) ):
-		if CHK < 10^(-998) then
-			return UNEXPECTED:
-		else
-			return BAD:
-		end if:
-	end if:
-end proc:
-
-# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 # -= Main Processing                                                                                               =-
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 

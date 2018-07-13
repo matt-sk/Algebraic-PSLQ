@@ -49,6 +49,15 @@ if not assigned( PRECHECK ) then
 	end proc:
 end if:
 
+# POSTCHECK(): Function run before standard results checking is run.
+# This function must return GOOD, BAD, FAIL to report an outcome, or CONTINUE to allow further checking.
+if not assigned( POSTCHECK ) then
+	POSTCHECK := proc( result, calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::boolean_constant;
+		option inline:
+		return result; # Do nothing, return the previously found result.
+	end proc:
+end if:
+
 # EXTRAOUTPUT(): Function run after standard outputting is performed, but before newline is output.
 # result will be one of GOOD, BAD, FAIL, or UNEXPECTED
 if not assigned( EXTRAOUTPUT ) then
@@ -75,12 +84,16 @@ end if:
 # This function checks the result of a computation.
 # To be passed in for testing.
 CHECK := proc( calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, ans::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )
-	local mult, XX1, rel;
+	local mult, XX1, rel, preResult, result;
 	global CHK, GOOD, BAD, UNEXPECTED;
 
+	# In the case that the result is not GOOD, CHK will store the numeric value of the expanded numeric check, and this value is appended to the output.
+	# We should initialise it to something inocuous just in case the PRECHECK causes this procedure to exit with a result other than GOOD.
+	CHK := "":
+
 	# Pre Check
-	CHK := PRECHECK( calc, xx, D, Precision ):
-	if CHK <> CONTINUE then return CHK fi:
+	preResult := PRECHECK( calc, xx, D, Precision ):
+	if preResult <> CONTINUE then return preResult fi:
 
 	# Check to see if the calculated relation is just an algebraic integer multiple of the known relation.
 	# To do this we calculte the multiple that turns ans[1] into calc[1] and multiply the entire ans list by this multiple.
@@ -89,17 +102,20 @@ CHECK := proc( calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(compl
 	CHK := expand(calc-ans*mult):
 
 	if convert(CHK,set) = {0} then
-	   return GOOD:
+	   result := GOOD:
+	   CHK := 0.0; # Needed in case POSTCHECK changes the result from GOOD to somethign else.
 	else
 		rel := expand( add( xx[k]*calc[k], k=1..nops(xx) ) ):
 		Digits := 1000;
 		CHK := abs( evalf[1000](rel) ):
 		if CHK < 10^(-998) then
-			return UNEXPECTED:
+			result := UNEXPECTED:
 		else
-			return BAD:
+			result := BAD:
 		end if:
 	end if:
+
+	return POSTCHECK( result, calc, xx, D, Precision ):
 end proc:
 
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-

@@ -63,7 +63,7 @@ try
 
 		# Output the results.
 		if RESULT = GOOD then
-			fprintf( outfile, "%a,table([Result=%s,mult=%a%s])\n", lineNum, RESULT, -calc[1] ), extraOutput );
+			fprintf( outfile, "%a,table([Result=%s,mult=%a%s])\n", lineNum, RESULT, -calc[1], extraOutput );
 		else
 			fprintf( outfile, "%a,table([Result=%s,calc=%a,CHK=%a%s])\n", lineNum, RESULT, calc, evalf[2](CHK), extraOutput );
 		end if;

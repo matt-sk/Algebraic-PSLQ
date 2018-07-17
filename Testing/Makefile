@@ -1,51 +1,73 @@
 MAPLE := $(shell which maple)
 
+# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
+#  = Generate lists of TestSets appropriate to each of the basic tests: PSLQ, REDUCTION, APSLQ             = 
+# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 CONSTANTS := real complex
 COEFFICIENTS := large small
 
-# Note that all PSLQ problems are approrpriate for APSLQ, and similarly all APSLQ problems are appropriate for REDUCTION.
-# So the %-Affixes (below) are for the exclusive cases (or, should they occur, cases where there is overlap, but )
-APSLQ-Affixes=-2 -3 -5 -6 -7 -10 -11
-PSLQ-Affixes=-1 1
-LLL-Affixes=1
-REDUCTION-Affixes=2 3 5 6 7 10 11
+#  = PSLQ Test Sets                                                                                        =
+PSLQ-Real-Affixes=1
+PSLQ-Complex-Affixes=-1
 
-APSLQ-TestSets := $(foreach a,$(APSLQ-Affixes),Z[sqrt($(a))])
-APSLQ-TestSets := $(foreach c,$(CONSTANTS),$(APSLQ-TestSets:%=%-${c}-constants))
-APSLQ-TestSets := $(foreach c,$(COEFFICIENTS),$(APSLQ-TestSets:%=%-${c}-coefficients))
+PSLQ-Real-TestSets := $(foreach a,$(PSLQ-Real-Affixes),Z[sqrt($(a))])
+PSLQ-Real-TestSets := $(PSLQ-Real-TestSets:%=%-real-constants)
+PSLQ-Real-TestSets := $(foreach c,$(COEFFICIENTS),$(PSLQ-Real-TestSets:%=%-${c}-coefficients))
 
-# PSLQ Special Case (I can't see a good way to automate this) 
-# -- Z[sqrt(1)] can only have real coefficients, while Z[sqrt(-1)] can have both real and complex coefficients.
-PSLQ-TestSets := Z[sqrt(-1)]-real-constants Z[sqrt(-1)]-complex-constants Z[sqrt(1)]-real-constants
-PSLQ-TestSets := $(foreach c,$(COEFFICIENTS),$(PSLQ-TestSets:%=%-${c}-coefficients))
+PSLQ-Complex-TestSets := $(foreach a,$(PSLQ-Complex-Affixes),Z[sqrt($(a))])
+PSLQ-Complex-TestSets := $(foreach c,$(CONSTANTS),$(PSLQ-Complex-TestSets:%=%-${c}-constants))
+PSLQ-Complex-TestSets := $(foreach c,$(COEFFICIENTS),$(PSLQ-Complex-TestSets:%=%-${c}-coefficients))
 
-LLL-TestSets := $(foreach a,$(LLL-Affixes),Z[sqrt(${a})])
-LLL-TestSets := $(foreach c,$(CONSTANTS),$(LLL-TestSets:%=%-${c}-constants))
-LLL-TestSets := $(foreach c,$(COEFFICIENTS),$(LLL-TestSets:%=%-${c}-coefficients))
+PSLQ-TestSets := $(PSLQ-Real-TestSets) $(PSLQ-Complex-TestSets)
 
-# The REDUCTION exclusive problems (i.e., those not also approrpate for APSLQ) are for positive affixes, and so complex constants aren't appropriate.
-REDUCTION-TestSets := $(foreach a,$(REDUCTION-Affixes),Z[sqrt(${a})])
-REDUCTION-TestSets := $(REDUCTION-TestSets:%=%-real-constants) # Only real constants.
-REDUCTION-TestSets := $(foreach c,$(COEFFICIENTS),$(REDUCTION-TestSets:%=%-${c}-coefficients))
-REDUCTION-TestSets := $(APSLQ-TestSets) $(REDUCTION-TestSets)
+#  = REDUCTION Test Sets                                                                                   =
+REDUCTION-Real-Affixes=2 3 5 6 7 10 11
+REDUCTION-Complex-Affixes=-2 -3 -5 -6 -7 -10 -11
 
-# Note that REDUCTION-TestSets inherits the APSLQ-TestSets /before/ the PSLQ-TestSets are appended to the APSLQ-TestSets.
-# This is deliberate, and done so because it is pointless to use REDUCTION method when regular PSLQ can be used. The test scripts raise an error if we attempt to do otherwise.
-APSLQ-TestSets := $(PSLQ-TestSets) $(APSLQ-TestSets)
+REDUCTION-Real-TestSets := $(foreach a,$(REDUCTION-Real-Affixes),Z[sqrt($(a))])
+REDUCTION-Real-TestSets := $(REDUCTION-Real-TestSets:%=%-real-constants)
+REDUCTION-Real-TestSets := $(foreach c,$(COEFFICIENTS),$(REDUCTION-Real-TestSets:%=%-${c}-coefficients))
+
+REDUCTION-Complex-TestSets := $(foreach a,$(REDUCTION-Complex-Affixes),Z[sqrt($(a))])
+REDUCTION-Complex-TestSets := $(foreach c,$(CONSTANTS),$(REDUCTION-Complex-TestSets:%=%-${c}-constants))
+REDUCTION-Complex-TestSets := $(foreach c,$(COEFFICIENTS),$(REDUCTION-Complex-TestSets:%=%-${c}-coefficients))
+
+REDUCTION-TestSets := $(REDUCTION-Real-TestSets) $(REDUCTION-Complex-TestSets)
+
+#  = APSLQ Test Sets (all are complex except for the usual real case)                                      =
+APSLQ-gamma_1-Affixes=-1 -2 -3 -7 -11
+APSLQ-no_gamma_1-Affixes= -5 -6 -10 
+
+APSLQ-gamma_1-TestSets := $(foreach a,$(APSLQ-gamma_1-Affixes),Z[sqrt($(a))])
+APSLQ-gamma_1-TestSets := $(foreach c,$(CONSTANTS),$(APSLQ-gamma_1-TestSets:%=%-${c}-constants))
+APSLQ-gamma_1-TestSets := $(foreach c,$(COEFFICIENTS),$(APSLQ-gamma_1-TestSets:%=%-${c}-coefficients))
+
+#  = Special case for the unique real-only case that APSLQ can handle                                      =
+APSLQ-gamma_1-TestSets := Z[sqrt(1)]-real-constants-small-coefficients Z[sqrt(1)]-real-constants-large-coefficients $(APSLQ-gamma_1-TestSets)
+
+APSLQ-no_gamma_1-TestSets := $(foreach a,$(APSLQ-no_gamma_1-Affixes),Z[sqrt($(a))])
+APSLQ-no_gamma_1-TestSets := $(foreach c,$(CONSTANTS),$(APSLQ-no_gamma_1-TestSets:%=%-${c}-constants))
+APSLQ-no_gamma_1-TestSets := $(foreach c,$(COEFFICIENTS),$(APSLQ-no_gamma_1-TestSets:%=%-${c}-coefficients))
+# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 
 
-# Load Phase 1 specific setup
+# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
+#  = Load Phase 1 specific setup                                                                           =
+# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 include Phase1.makefile
+# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 
-# Load Phase 2 specific setup
-include Phase2.makefile
-
-# Combine the Phase 1 and Phase 2 output file lists into generic lists.
+# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
+#  = Combine the Phase 1 and Phase 2 output file lists into generic lists                                  =
+# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 APSLQ-OutputFiles := $(Ph1-APSLQ-OutputFiles) $(Ph2-APSLQ-OutputFiles)
 PSLQ-OutputFiles := $(Ph1-PSLQ-OutputFiles) $(Ph2-PSLQ-OutputFiles)
-LLL-OutputFiles := $(Ph1-LLL-OutputFiles) $(Ph2-LLL-OutputFiles)
 REDUCTION-OutputFiles := $(Ph1-REDUCTION-OutputFiles) $(Ph2-REDUCTION-OutputFiles)
+# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 
+# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
+#  = Rules                                                                                                 =
+# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 .SECONDEXPANSION:
 
 .DELETE_ON_ERROR:
@@ -54,23 +76,22 @@ REDUCTION-OutputFiles := $(Ph1-REDUCTION-OutputFiles) $(Ph2-REDUCTION-OutputFile
 
 all: Ph1-Testing Ph2-Testing
 
+#  = All output files rely on its base TestFile (from Sets/), and stress-test-common.mpl.                  =
+#  = Note we need to use the sed command to properly tease out the base file from the output file name.    =
+#  = Also note that we needed to use secondary expansion to make the dependency work properly.             =
+Results/%: TESTFILE=$(shell echo "$@" | sed 's/^Results\/Phase[^\/]*\/.*\(Z.*-coefficients\).*/Sets\/\1/g')
+Results/%: GENERAL_DEPENDENCIES=$(TESTFILE) stress-test-common.mpl
 
-# Each APSLQ outpuf file relies on the stress-test-*.mpl files, its base TestFile from the Sets folder, and the APSLQ module.
-# Note we need to use the sed command to properly tease out the base file from the output file name.
-# Also note that we needed to use secondary expansion to make the dependency work properly.
-$(APSLQ-OutputFiles): TESTFILE=$(shell echo "$@" | sed 's/^Results\/Phase[12]\/\(.*\)-APSLQ.*/Sets\/\1/g')
-$(APSLQ-OutputFiles): INPUT_LENGTH=$(shell echo "$@" | sed 's/^.*-\([^-]*\)-input.*/\1/g')
-$(APSLQ-OutputFiles): GAMMA=$(shell echo "$@" | sed 's/^.*-\([^-]*\)-gamma.*/\1/g')
-$(APSLQ-OutputFiles): THRESHOLD=$(shell echo "$@" | sed 's/^.*-\([^-]*\)-threshold.*/\1/g')
-$(APSLQ-OutputFiles): stress-test-common.mpl stress-test-APSLQ.mpl $$(TESTFILE) ../Maple/APSLQ.module.mpl
-	$(MAPLE) -q -c 'PHASE:=$(PHASE);' -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' -c 'INPUT_LENGTH:=$(INPUT_LENGTH);' -c "Gamma:='$(GAMMA)';" -c 'THRESHOLD:=$(THRESHOLD);' -c 'ITERATIONS:=10000;' stress-test-APSLQ.mpl
+#  = APSLQ output files rely on stress-test-APSLQ and the APSLQ.module.mpl file (in addition to the general requirements).
+#  = Note that we cannot use a %-rule to uniquely identify APSLQ output files, so we use $(APSLQ-OutputFiles) instead.
+$(APSLQ-OutputFiles): $$(GENERAL_DEPENDENCIES) $$(PHASE_DEPENDENCIES) stress-test-APSLQ.mpl ../Maple/APSLQ.module.mpl
+	$(MAPLE) -q -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' $(EXTRA_PARAMETERS) stress-test-APSLQ.mpl
 
-$(PSLQ-OutputFiles): TESTFILE=$(shell echo "$@" | sed 's/^Results\/Phase[12]\/\(.*\)-PSLQ.*/Sets\/\1/g')
-$(PSLQ-OutputFiles): INPUT_LENGTH=$(shell echo "$@" | sed 's/^.*-\([^-]*\)-input.*/\1/g')
-$(PSLQ-OutputFiles): stress-test-common.mpl stress-test-PSLQ.mpl $$(TESTFILE)
-	$(MAPLE) -q -c 'PHASE:=$(PHASE);' -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' -c 'INPUT_LENGTH:=$(INPUT_LENGTH);' stress-test-PSLQ.mpl 
+#  = PSLQ output files rely only on stress-test-PSLQ (in addition to the general requirements).            =
+Results/%-PSLQ: $$(GENERAL_DEPENDENCIES) $$(PHASE_DEPENDENCIES) stress-test-PSLQ.mpl
+	$(MAPLE) -q -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' $(EXTRA_PARAMETERS) stress-test-PSLQ.mpl 
 
-$(REDUCTION-OutputFiles): TESTFILE=$(shell echo "$@" | sed 's/^Results\/Phase[12]\/\(.*\)-REDUCTION.*/Sets\/\1/g')
-$(REDUCTION-OutputFiles): INPUT_LENGTH=$(shell echo "$@" | sed 's/^.*-\([^-]*\)-input.*/\1/g')
-$(REDUCTION-OutputFiles): stress-test-common.mpl stress-test-REDUCTION.mpl $$(TESTFILE)
-	$(MAPLE) -q -c 'PHASE:=$(PHASE);' -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' -c 'INPUT_LENGTH:=$(INPUT_LENGTH);' stress-test-REDUCTION.mpl 
+#  = REDUCTION output files rely only on stress-test-REDUCTION (in addition to the general requirements).  =
+Results/%-REDUCTION: $$(GENERAL_DEPENDENCIES) $$(PHASE_DEPENDENCIES) stress-test-REDUCTION.mpl
+	$(MAPLE) -q -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' $(EXTRA_PARAMETERS) stress-test-REDUCTION.mpl 
+# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-

@@ -85,13 +85,13 @@ Results/%: GENERAL_DEPENDENCIES=$(TESTFILE) stress-test-common.mpl
 #  = APSLQ output files rely on stress-test-APSLQ and the APSLQ.module.mpl file (in addition to the general requirements).
 #  = Note that we cannot use a %-rule to uniquely identify APSLQ output files, so we use $(APSLQ-OutputFiles) instead.
 $(APSLQ-OutputFiles): $$(GENERAL_DEPENDENCIES) $$(PHASE_DEPENDENCIES) stress-test-APSLQ.mpl ../Maple/APSLQ.module.mpl
-	$(MAPLE) -q -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' $(EXTRA_PARAMETERS) stress-test-APSLQ.mpl
+	$(MAPLE) -q -c "PHASE:=$(PHASE);" -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' $(EXTRA_PARAMETERS) stress-test-APSLQ.mpl
 
 #  = PSLQ output files rely only on stress-test-PSLQ (in addition to the general requirements).            =
 Results/%-PSLQ: $$(GENERAL_DEPENDENCIES) $$(PHASE_DEPENDENCIES) stress-test-PSLQ.mpl
-	$(MAPLE) -q -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' $(EXTRA_PARAMETERS) stress-test-PSLQ.mpl 
+	$(MAPLE) -q -c "PHASE:=$(PHASE);" -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' $(EXTRA_PARAMETERS) stress-test-PSLQ.mpl 
 
 #  = REDUCTION output files rely only on stress-test-REDUCTION (in addition to the general requirements).  =
 Results/%-REDUCTION: $$(GENERAL_DEPENDENCIES) $$(PHASE_DEPENDENCIES) stress-test-REDUCTION.mpl
-	$(MAPLE) -q -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' $(EXTRA_PARAMETERS) stress-test-REDUCTION.mpl 
+	$(MAPLE) -q -c "PHASE:=$(PHASE);" -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' $(EXTRA_PARAMETERS) stress-test-REDUCTION.mpl 
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-

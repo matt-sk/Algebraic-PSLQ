@@ -657,7 +657,7 @@
 657,table([Result=FAIL,calc=FAIL,CHK="",FAILinfo="Maximum iteration count exceeded",iterations=10000,significance=infinity,warning=false])
 658,table([Result=FAIL,calc=FAIL,CHK="",FAILinfo="Maximum iteration count exceeded",iterations=10000,significance=infinity,warning=false])
 659,table([Result=FAIL,calc=FAIL,CHK="",FAILinfo="Maximum iteration count exceeded",iterations=10000,significance=infinity,warning=false])
-660,table([Result=GOOD,mult=1,iterations=44,significance=[.59e-69, .22e-69],warning=false])
+660,table([Result=GOOD,mult=1,iterations=44,significance=[.59e-69, .65e-69],warning=false])
 661,table([Result=FAIL,calc=FAIL,CHK="",FAILinfo="Maximum iteration count exceeded",iterations=10000,significance=infinity,warning=false])
 662,table([Result=FAIL,calc=FAIL,CHK="",FAILinfo="Maximum iteration count exceeded",iterations=10000,significance=infinity,warning=false])
 663,table([Result=FAIL,calc=FAIL,CHK="",FAILinfo="Maximum iteration count exceeded",iterations=10000,significance=infinity,warning=false])

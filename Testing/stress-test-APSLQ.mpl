@@ -133,14 +133,6 @@ TEST := proc( xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)
 	return calc;
 end proc:
 
-PRECHECK := proc( calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::boolean_constant;
-	if calc = FAIL then
-		return FAIL
-	else
-		return CONTINUE
-	end if;
-end proc:
-
 EXTRAOUTPUT := proc( result, calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::string;
 	local diagnostics := APSLQ:-GetDiagnostics( );
 	global FAILinfo;

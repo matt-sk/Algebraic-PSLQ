@@ -1,10 +1,14 @@
+read "IntegerRelationFunctions.mpl":
+
 # Set up functions used by stress-test-common.mpl
 TEST := proc( xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )
-	local omega, xxE, calc:
+	local omega, xxE, calc, recover:
 	uses IntegerRelations:
 
 	if abs(D) in {0,1} then
-		error "Pointless using REDUCTION method for an example that can be directly performed with PSLQ":
+		error "Pointless using REDUCTION method for a classical integer relation":
+	elif INTEGER_RELATION_FUNCTION = LLL_INTEGER_RELATION and D < 0 then
+		error "Cannot use LLL for complex quadratic extensions":
 	end if:
 	
 	# Set the precision. We need this now so that our calculation of xxE is correct.
@@ -14,14 +18,13 @@ TEST := proc( xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)
 	omega := piecewise( D mod 4 = 1, (1+sqrt(D))/2, sqrt(D) ):
 	xxE := map( x -> (x, omega*x), xx ):
 
-	# Run PSLQ
-	calc := PSLQ(xxE):
+	# Run the integer relation finding function
+	calc := INTEGER_RELATION_FUNCTION(xxE, Precision):
 
-	# Recover the algebraic integer relations from the PSLQ output.
-	calc := [ seq( calc[2*k-1]+omega*calc[2*k], k = 1 .. (nops(xxE)/2 ) ) ]:
-	calc := map( expand, calc ):
+	# Function to recover the algebraic integer relations from the PSLQ output.
+	recover := rel -> [ seq( expand(rel[2*k-1]+omega*rel[2*k]), k = 1 .. (nops(xxE)/2 ) ) ]:
 
-	return calc:
+	return map( recover, calc ):
 end proc:
 
 # Type declarations for the specific algebraic integers we need to test for.
@@ -84,16 +87,21 @@ POSTCHECK := proc( result, calc, xx::{list(complexcons),'Vector'(complexcons),'v
 	end if:
 end proc:
 
+
 EXTRAOUTPUT := proc( result, calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::string;
-	global ORIG_RESULT:
+	local _extra_output := "":
+	global ORIG_RESULT, LLL_Num_Attempts, LLL_Num_Candidates:
 
 	if result = FAIL then
-		return sprintf( ",OriginalResult=%s", ORIG_RESULT );
-	else
-		return "";
+		_extra_output := cat( _extra_output, sprintf( ",OriginalResult=%s", ORIG_RESULT ) ):
 	end if:
-end proc:
 
+	if INTEGER_RELATION_FUNCTION = LLL_INTEGER_RELATION then
+		_extra_output := cat( _extra_output, sprintf( ",LLL_attempts=%a,CandidateRelations=%a", LLL_Num_Attempts, LLL_Num_Candidates ) ):
+	end if:
+
+	return _extra_output:
+end proc:
 
 # Run the tests.
 read "stress-test-common.mpl";

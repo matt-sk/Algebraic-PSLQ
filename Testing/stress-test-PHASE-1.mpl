@@ -52,20 +52,22 @@ try
 		ans := [ -1, seq(coefficients[k], k in Indices) ]:
 
 		calc := TEST( xx, d, prec );
-		calc := map( sort, calc ); # Maple isn't entirely consistent with the order of sub-expressions when it outputs algebraic numbers. Hopefully this helps.
+		#calc := map( sort, calc ); # Maple isn't entirely consistent with the order of sub-expressions when it outputs algebraic numbers. Hopefully this helps.
 
-		RESULT := CHECK( calc, xx, ans, d, prec );
+		# Note that the calc variable may have multiple candidate relations.
+		# The CHECK function scans through these and returns the best result possible, as well as the relation (if any).
+		RESULT,rel	:= CHECK( calc, xx, ans, d, prec );
 
-		extraOutput := EXTRAOUTPUT(RESULT,calc,xx,d,prec);
+		extraOutput := EXTRAOUTPUT(RESULT,rel ,xx,d,prec);
 
 		# Increment the count
 		cat(RESULT,count) := eval(cat(RESULT,count)) + 1;
 
 		# Output the results.
 		if RESULT = GOOD then
-			fprintf( outfile, "%a,table([Result=%s,mult=%a%s])\n", lineNum, RESULT, -calc[1], extraOutput );
+			fprintf( outfile, "%a,table([Result=%s,mult=%a%s])\n", lineNum, RESULT, -rel[1], extraOutput );
 		else
-			fprintf( outfile, "%a,table([Result=%s,calc=%a,CHK=%a%s])\n", lineNum, RESULT, calc, evalf[2](CHK), extraOutput );
+			fprintf( outfile, "%a,table([Result=%s,relation=%a,CHK=%a%s])\n", lineNum, RESULT, rel, evalf[2](CHK), extraOutput );
 		end if;
 
 	end do:

@@ -76,7 +76,7 @@ Ph2-REDUCTION-LLL-Long-OutputFiles := $(REDUCTION-LLL-TestSets:%=Results/Phase2/
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- =-
 # -= Intermediate Targets
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- =-
-.PHONY: Ph2-Testing Ph2-APSLQ-Testing Ph2-PSLQ-Testing Ph2-LLL-Testing Ph2-REDUCTION-Testing Ph2-Short-Testing Ph2-Long-Testing Ph2-APSLQ-Short-Testing Ph2-APSLQ-Long-Testing Ph2-PSLQ-Short-Testing Ph2-PSLQ-Long-Testing Ph2-LLL-Short-Testing Ph2-LLL-Long-Testing Ph2-REDUCTION-Short-Testing Ph2-REDUCTION-Long-Testing 
+.PHONY: Ph2-Testing Ph2-Short-Testing Ph2-Long-Testing Ph2-PSLQ-Testing Ph2-LLL-Testing Ph2-CLASSICAL-Testing Ph2-REDUCTION-Testing Ph2-APSLQ-Testing Ph2-CLASSICAL-PSLQ-Testing Ph2-CLASSICAL-LLL-Testing Ph2-REDUCTION-PSLQ-Testing Ph2-REDUCTION-LLL-Testing Ph2-CLASSICAL-Short-Testing Ph2-CLASSICAL-Long-Testing Ph2-REDUCTION-Short-Testing Ph2-REDUCTION-Long-Testing Ph2-PSLQ-Short-Testing Ph2-PSLQ-Long-Testing Ph2-LLL-Short-Testing Ph2-LLL-Long-Testing Ph2-CLASSICAL-PSLQ-Short-Testing Ph2-CLASSICAL-PSLQ-Long-Testing Ph2-CLASSICAL-LLL-Short-Testing Ph2-CLASSICAL-LLL-Long-Testing Ph2-REDUCTION-PSLQ-Short-Testing Ph2-REDUCTION-PSLQ-Long-Testing Ph2-REDUCTION-LLL-Short-Testing Ph2-REDUCTION-LLL-Long-Testing Ph2-APSLQ-Short-Testing Ph2-APSLQ-Long-Testing
 
 # Target for all Phase 1 testing
 Ph2-Testing: Ph2-CLASSICAL-Testing Ph2-REDUCTION-Testing Ph2-APSLQ-Testing
@@ -115,6 +115,14 @@ Ph2-CLASSICAL-Long-Testing: Ph2-CLASSICAL-PSLQ-Long-Testing Ph2-CLASSICAL-LLL-Lo
 Ph2-REDUCTION-Short-Testing: Ph2-REDUCTION-PSLQ-Short-Testing Ph2-REDUCTION-LLL-Short-Testing
 
 Ph2-REDUCTION-Long-Testing: Ph2-REDUCTION-PSLQ-Long-Testing Ph2-REDUCTION-LLL-Long-Testing
+
+Ph2-PSLQ-Short-Testing: Ph2-CLASSICAL-PSLQ-Short-Testing Ph2-REDUCTION-PSLQ-Short-Testing
+
+Ph2-PSLQ-Long-Testing: Ph2-CLASSICAL-PSLQ-Long-Testing Ph2-REDUCTION-PSLQ-Long-Testing
+
+Ph2-LLL-Short-Testing: Ph2-CLASSICAL-LLL-Short-Testing Ph2-REDUCTION-LLL-Short-Testing
+
+Ph2-LLL-Long-Testing: Ph2-CLASSICAL-LLL-Long-Testing Ph2-REDUCTION-LLL-Long-Testing
 
 # Targets for the smallest logical groupings.
 Ph2-CLASSICAL-PSLQ-Short-Testing: $(Ph2-CLASSICAL-PSLQ-Short-OutputFiles)

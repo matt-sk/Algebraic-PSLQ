@@ -33,6 +33,7 @@ try
 	SETUP( d, coeffDigits ):
 
 	# Process the input file.
+	START := time():
 	GOODcount,BADcount,UNEXPECTEDcount := 0,0,0:
 	while true do 
 		line := readline(testfile):
@@ -110,9 +111,10 @@ try
 		# Output the results.
 		fprintf( outfile, "%a,table([Result=%s,Precision=%a,BasePrecision=%a,Check=%a%s])\n", lineNum, RESULT, precision, basePrecision, ChkResult, extraOutput ):
 	end do:
+	END := time():
 
 	# Note that FAILcount is specific to the APSLQ file. Need some way to generalise this.
-	printf( "%s: complete.\n", OUTPUT ):
+	printf( "%s complete. %a seconds duration.\n", OUTPUT, END-START ):
 
 	fclose( testfile ):
 	fclose( outfile ):

@@ -35,6 +35,7 @@ try
 	SETUP( d, coeffDigits ):
 
 	# Process the input file.
+	START := time():
 	GOODcount,BADcount,UNEXPECTEDcount,FAILcount := 0,0,0,0:
 	for lineNum do 
 		line := readline(testfile);
@@ -71,9 +72,10 @@ try
 		end if;
 
 	end do:
+	END := time():
 
 	# Note that FAILcount is specific to the APSLQ file. Need some way to generalise this.
-	printf("%s: %a good examples, %a unexpected examples, %a bad examples, %a fails.\n", OUTPUT, GOODcount, UNEXPECTEDcount, BADcount, FAILcount);
+	printf("%s complete. %a seconds duration. %a good examples, %a unexpected examples, %a bad examples, %a fails.\n", OUTPUT, END-START, GOODcount, UNEXPECTEDcount, BADcount, FAILcount);
 
 	fclose( testfile ):
 	fclose( outfile ):

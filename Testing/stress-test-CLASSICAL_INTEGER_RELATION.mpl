@@ -14,10 +14,16 @@ end proc:
 
 EXTRAOUTPUT := proc( result, calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::string;
 	local _extra_output := "":
-	global LLL_Num_Attempts, LLL_Num_Candidates:
+	global LLL_Num_Attempts, LLL_Num_Candidates, FAILinfo:
 
+	# If the result was a fail, then include the FAILinfo
+	if result = FAIL then 
+		_extra_output := cat( _extra_output, sprintf( ",FAILinfo=\"%s\"", FAILinfo ) ):
+	end if:
+
+	# If we computed the integer relation using LLL, then include the LLL-specivic details of the computation.
 	if INTEGER_RELATION_FUNCTION = LLL_INTEGER_RELATION then
-		_extra_output := sprintf( ",LLL_attempts=%a,CandidateRelations=%a", LLL_Num_Attempts, LLL_Num_Candidates ):
+		_extra_output := cat( _extra_output, sprintf( ",LLL_attempts=%a,CandidateRelations=%a", LLL_Num_Attempts, LLL_Num_Candidates ) ):
 	end if:
 
 	return _extra_output:

@@ -24,7 +24,8 @@ TEST := proc( xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)
 	# Function to recover the algebraic integer relations from the PSLQ output.
 	recover := rel -> [ seq( expand(rel[2*k-1]+omega*rel[2*k]), k = 1 .. (nops(xxE)/2 ) ) ]:
 
-	return map( recover, calc ):
+	# Only recover the relation if we didn't encouter a FAIL result (which is unlikely, but possible);
+	return piecewise( calc=FAIL, FAIL, map( recover, calc ) ):
 end proc:
 
 # Type declarations for the specific algebraic integers we need to test for.
@@ -90,12 +91,19 @@ end proc:
 
 EXTRAOUTPUT := proc( result, calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::string;
 	local _extra_output := "":
-	global ORIG_RESULT, LLL_Num_Attempts, LLL_Num_Candidates:
+	global ORIG_RESULT, LLL_Num_Attempts, LLL_Num_Candidates, FAILinfo:
 
+	# If we get a FAIL result, then we need to know the original result, because we may have had a GOOD result that was rejected due to not having quadratic integers from the correct extension field.
 	if result = FAIL then
 		_extra_output := cat( _extra_output, sprintf( ",OriginalResult=%s", ORIG_RESULT ) ):
 	end if:
 
+	# If the original result was a fail, then include the FAILinfo
+	if ORIG_RESULT = FAIL then
+		_extra_output := cat( _extra_output, sprintf( ",FAILinfo=\"%s\"", FAILinfo ) ):
+	end if:
+
+	# If we computed the integer relation using LLL, then include the LLL-specivic details of the computation.
 	if INTEGER_RELATION_FUNCTION = LLL_INTEGER_RELATION then
 		_extra_output := cat( _extra_output, sprintf( ",LLL_attempts=%a,CandidateRelations=%a", LLL_Num_Attempts, LLL_Num_Candidates ) ):
 	end if:

@@ -18,7 +18,7 @@ fi;
 LLL_INTEGER_RELATION := proc( x::~Vector[column](realcons), Precision::posint )
 	uses IntegerRelations, LinearAlgebra:
 	local xx, M, maxXX, K, k, n, calc, evaluate, rows, Id, V, epsilon:
-	global LLL_Num_Attempts, LLL_Num_Candidates:
+	global LLL_Num_Attempts, LLL_Num_Candidates, FAILinfo:
 
 	# Calculate the length of the input vector.
 	n := Dimension( x ):
@@ -74,6 +74,7 @@ LLL_INTEGER_RELATION := proc( x::~Vector[column](realcons), Precision::posint )
 	# If we get to this point, then either we found posisble integer relations (for some value of k)
 	# or we got to k=1 without finding any posisble relation.
 	if rows = {} then
+		FAILinfo := "No candidate relations found for this precision":
 		return FAIL:
 	else
 		return map2( map, trunc, rows ): # Make sure each eleement of each candidate relation is an integer.
@@ -84,10 +85,15 @@ end proc:
 PSLQ_INTEGER_RELATION := proc( xx::~Vector[column](complexcons), Precision::posint )
 	uses IntegerRelations:
 	local calc:
+	global FAILinfo:
 
-	Digits := Precision;
+	# Make sure FAILinfo is an empty string so that EXTRAOUTPUT functions which expect it may use of it without error.
+	FAILinfo := "":
 
+	# Set precision and run PSLQ to find a candidate integer relation.
+	Digits := Precision:
 	calc := PSLQ( xx ):
 
-	return { convert( calc, list ) }: # Convert the candidate integer relation to a list, and returnt that list as the only element of a singleton set.
+	# Convert the candidate integer relation to a list, and return that list as the only element of a singleton set.
+	return { convert( calc, list ) }:
 end proc:

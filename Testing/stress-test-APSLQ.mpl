@@ -130,7 +130,7 @@ TEST := proc( xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)
 		FAILinfo := "Maximum iteration count exceeded";
 	end if:
 
-	return calc;
+	return { convert( calc, list ) };
 end proc:
 
 EXTRAOUTPUT := proc( result, calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::string;

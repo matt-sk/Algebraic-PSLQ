@@ -34,8 +34,8 @@ Ph2-APSLQ-Long-OutputFiles := $(Ph2-APSLQ-Long-gamma_1-OutputFiles) $(Ph2-APSLQ-
 Ph2-APSLQ-Short-OutputFiles := $(foreach t,$(Thresholds),$(Ph2-APSLQ-Short-OutputFiles:%=%-${t}-threshold))
 Ph2-APSLQ-Long-OutputFiles := $(foreach t,$(Thresholds),$(Ph2-APSLQ-Long-OutputFiles:%=%-${t}-threshold))
 
-# # Amalgamate all the APSLQ output files into a single list.
-# Ph2-APSLQ-OutputFiles := $(Ph2-APSLQ-Short-OutputFiles) $(Ph2-APSLQ-Long-OutputFiles)
+# Amalgamate all the APSLQ output files into a single list. (Needed in main makefile becuase APSLQ output files can't be easily pattern-matched).
+Ph2-APSLQ-OutputFiles := $(Ph2-APSLQ-Short-OutputFiles) $(Ph2-APSLQ-Long-OutputFiles)
 
 
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- =-
@@ -48,13 +48,6 @@ Ph2-CLASSICAL-PSLQ-Long-OutputFiles := $(CLASSICAL-PSLQ-TestSets:%=Results/Phase
 Ph2-CLASSICAL-LLL-Short-OutputFiles := $(CLASSICAL-LLL-TestSets:%=Results/Phase2/%-short-input-CLASSICAL-LLL)
 Ph2-CLASSICAL-LLL-Long-OutputFiles := $(CLASSICAL-LLL-TestSets:%=Results/Phase2/%-long-input-CLASSICAL-LLL)
 
-# # Amalgamate the long and short lists into a single list.
-# Ph2-CLASSICAL-PSLQ-OutputFiles := $(Ph2-CLASSICAL-PSLQ-Short-OutputFiles) $(Ph2-CLASSICAL-PSLQ-Long-OutputFiles)
-# Ph2-CLASSICAL-LLL-OutputFiles := $(Ph2-CLASSICAL-LLL-Short-OutputFiles) $(Ph2-CLASSICAL-LLL-Long-OutputFiles)
-
-# # Amalgamate PSLQ and LLL lists into a single list.
-# Ph2-CLASSICAL-OutputFiles := $(Ph2-CLASSICAL-PSLQ-OutputFiles) $(Ph2-CLASSICAL-LLL-OutputFiles)
-
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- =-
 # -= REDUCTION Output Files
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- =-
@@ -64,13 +57,6 @@ Ph2-REDUCTION-PSLQ-Short-OutputFiles := $(REDUCTION-PSLQ-TestSets:%=Results/Phas
 Ph2-REDUCTION-PSLQ-Long-OutputFiles := $(REDUCTION-PSLQ-TestSets:%=Results/Phase2/%-long-input-REDUCTION-PSLQ)
 Ph2-REDUCTION-LLL-Short-OutputFiles := $(REDUCTION-LLL-TestSets:%=Results/Phase2/%-short-input-REDUCTION-LLL)
 Ph2-REDUCTION-LLL-Long-OutputFiles := $(REDUCTION-LLL-TestSets:%=Results/Phase2/%-long-input-REDUCTION-LLL)
-
-# # Amalgamate the long and short lists into a single list.
-# Ph2-REDUCTION-PSLQ-OutputFiles := $(Ph2-REDUCTION-PSLQ-Short-OutputFiles) $(Ph2-REDUCTION-PSLQ-Long-OutputFiles)
-# Ph2-REDUCTION-LLL-OutputFiles := $(Ph2-REDUCTION-LLL-Short-OutputFiles) $(Ph2-REDUCTION-LLL-Long-OutputFiles)
-
-# # Amalgamate PSLQ and LLL lists into a single list.
-# Ph2-REDUCTION-OutputFiles := $(Ph2-REDUCTION-PSLQ-OutputFiles) $(Ph2-REDUCTION-LLL-OutputFiles)
 
 
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- =-
@@ -87,7 +73,7 @@ Ph2-Short-Testing: Ph2-CLASSICAL-Short-Testing Ph2-REDUCTION-Short-Testing Ph2-A
 Ph2-Long-Testing: Ph2-CLASSICAL-Long-Testing Ph2-REDUCTION-Long-Testing Ph2-APSLQ-Long-Testing
 
 # Targets for testing all PSLQ related or all LLL related cases.
-Ph2-PSLQ-Testing: Ph2-CLASSICAL-PSLQ-Testing Ph2-REDUCTION-LLL-Testing
+Ph2-PSLQ-Testing: Ph2-CLASSICAL-PSLQ-Testing Ph2-REDUCTION-PSLQ-Testing
 
 Ph2-LLL-Testing: Ph2-CLASSICAL-LLL-Testing Ph2-REDUCTION-LLL-Testing
 

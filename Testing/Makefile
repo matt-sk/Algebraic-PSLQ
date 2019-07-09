@@ -66,11 +66,10 @@ include Phase2.makefile
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
-#  = Combine the Phase 1 and Phase 2 output file lists into generic lists                                  =
+#  = Combine the Phase 1 and Phase 2 APSLQ output file lists into generic lists                            =
+#  = (this is not needed for CLASSICAL, nor REDUCTION because of the easier pattern matching for those)    =
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 APSLQ-OutputFiles := $(Ph1-APSLQ-OutputFiles) $(Ph2-APSLQ-OutputFiles)
-PSLQ-OutputFiles := $(Ph1-PSLQ-OutputFiles) $(Ph2-PSLQ-OutputFiles)
-REDUCTION-OutputFiles := $(Ph1-REDUCTION-OutputFiles) $(Ph2-REDUCTION-OutputFiles)
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
@@ -80,9 +79,19 @@ REDUCTION-OutputFiles := $(Ph1-REDUCTION-OutputFiles) $(Ph2-REDUCTION-OutputFile
 
 .DELETE_ON_ERROR:
 
-.PHONY: all
+.PHONY: all CLASSICAL-Testing REDUCTION-Testing APSLQ-Testing PSLQ-Testing LLL-Testing # Note other .PHONY targets defined in Phase?.makefile files.
 
 all: Ph1-Testing Ph2-Testing
+
+CLASSICAL-Testing: Ph1-CLASSICAL-Testing Ph2-CLASSICAL-Testing
+
+REDUCTION-Testing: Ph1-REDUCTION-Testing Ph2-REDUCTION-Testing
+
+APSLQ-Testing: Ph1-APSLQ-Testing Ph2-APSLQ-Testing
+
+PSLQ-Testing: Ph1-PSLQ-Testing Ph2-PSLQ-Testing
+
+LLL-Testing: Ph1-LLL-Testing Ph2-LLL-Testing
 
 #  = All output files rely on its base TestFile (from Sets/), and stress-test-common.mpl.                  =
 #  = Note we need to use the sed command to properly tease out the base file from the output file name.    =
@@ -90,6 +99,10 @@ all: Ph1-Testing Ph2-Testing
 Results/%: TESTFILE=$(shell echo "$@" | sed 's/^Results\/Phase[^\/]*\/.*\(Z.*-coefficients\).*/Sets\/\1/g')
 Results/%: GENERAL_DEPENDENCIES=$(TESTFILE) stress-test-common.mpl
 Results/%: MAPLE_ARGUMENTS=-q -c 'PHASE:=$(PHASE);' -c 'INPUT:=\"$(TESTFILE)\";' -c 'OUTPUT:=\"$@\";' $(EXTRA_PARAMETERS)
+
+#  = Phase 1 testing relies stress-test-PHASE-1.mpl and similarly Phase 2 relies on stress-test-PHASE-2.mpl
+Results/Phase1/%: stress-test-PHASE-1.mpl
+Results/Phase2/%: stress-test-PHASE-2.mpl
 
 #  = APSLQ output files rely on stress-test-APSLQ and the APSLQ.module.mpl file (in addition to the general requirements).
 #  = Note that we cannot use a %-rule to uniquely identify APSLQ output files, so we use $(APSLQ-OutputFiles) instead.

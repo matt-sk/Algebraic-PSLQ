@@ -64,7 +64,7 @@ Ph1-PSLQ-Testing: Ph1-CLASSICAL-PSLQ-Testing Ph1-REDUCTION-PSLQ-Testing
 # Targets for testing each conceptual group (classical algebraic relations, REDUCTION method, and Algebraic PSLQ)
 Ph1-CLASSICAL-Testing: Ph1-CLASSICAL-PSLQ-Testing Ph1-CLASSICAL-LLL-Testing
 
-Ph1-REDUCTION-Testing: Ph1-REDUCTION-PSLQ-Testing Ph1-REDUCTION-LLL-OutputFiles
+Ph1-REDUCTION-Testing: Ph1-REDUCTION-PSLQ-Testing Ph1-REDUCTION-LLL-Testing
 
 Ph1-APSLQ-Testing: $(Ph1-APSLQ-OutputFiles)
 

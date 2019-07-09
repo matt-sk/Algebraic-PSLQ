@@ -128,6 +128,7 @@ TEST := proc( xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)
 
 	if calc = FAIL then
 		FAILinfo := "Maximum iteration count exceeded";
+		return FAIL:
 	end if:
 
 	return { convert( calc, list ) };

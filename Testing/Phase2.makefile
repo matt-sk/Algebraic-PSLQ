@@ -93,7 +93,7 @@ Ph2-REDUCTION-PSLQ-Testing: Ph2-REDUCTION-PSLQ-Short-Testing Ph2-REDUCTION-PSLQ-
 
 Ph2-REDUCTION-LLL-Testing: Ph2-REDUCTION-LLL-Short-Testing Ph2-REDUCTION-LLL-Long-Testing
 
-# Targets for testting all short or all long cases for the cases that can be sub-divided into PSLQ or LLL.
+# Targets for testing all short or all long cases for the cases that can be sub-divided into PSLQ or LLL.
 Ph2-CLASSICAL-Short-Testing: Ph2-CLASSICAL-PSLQ-Short-Testing Ph2-CLASSICAL-LLL-Short-Testing
 
 Ph2-CLASSICAL-Long-Testing: Ph2-CLASSICAL-PSLQ-Long-Testing Ph2-CLASSICAL-LLL-Long-Testing	

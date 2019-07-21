@@ -54,7 +54,7 @@ Ph1-REDUCTION-LLL-OutputFiles := $(REDUCTION-LLL-TestSets:%=Results/Phase1/%-RED
 .PHONY: Ph1-Testing Ph1-APSLQ-Testing Ph1-CLASSICAL-Testing Ph1-REDUCTION-Testing Ph1-CLASSICAL-PSLQ-Testing Ph1-CLASSICAL-LLL-Testing Ph1-REDUCTION-PSLQ-Testing Ph1-REDUCTION-LLL-Testing
 
 # Target for all Phase 1 testing
-Ph1-Testing: Ph1-APSLQ-Testing Ph1-PSLQ-Testing Ph1-REDUCTION-Testing
+Ph1-Testing: Ph1-CLASSICAL-Testing Ph1-REDUCTION-Testing Ph1-APSLQ-Testing 
 
 # Target for all LLL or PSLQ based computations
 Ph1-LLL-Testing: Ph1-CLASSICAL-LLL-Testing Ph1-REDUCTION-LLL-Testing

@@ -79,19 +79,32 @@ APSLQ-OutputFiles := $(Ph1-APSLQ-OutputFiles) $(Ph2-APSLQ-OutputFiles)
 
 .DELETE_ON_ERROR:
 
-.PHONY: all CLASSICAL-Testing REDUCTION-Testing APSLQ-Testing PSLQ-Testing LLL-Testing # Note other .PHONY targets defined in Phase?.makefile files.
+# Note other .PHONY targets defined in Phase?.makefile files.
+.PHONY: all CLASSICAL-Testing REDUCTION-Testing APSLQ-Testing PSLQ-Testing LLL-Testing CLASSICAL-LLL-Testing CLASSICAL-PSLQ-Testing REDUCTION-LLL-Testing REDUCTION-PSLQ-Testing
 
+# Target for all Phase 1 testing
 all: Ph1-Testing Ph2-Testing
 
+# Target for all LLL or PSLQ based computations
+LLL-Testing: Ph1-LLL-Testing Ph2-LLL-Testing
+
+PSLQ-Testing: Ph1-PSLQ-Testing Ph2-PSLQ-Testing
+
+# Targets for testing each conceptual group (classical algebraic relations, REDUCTION method, and Algebraic PSLQ)
 CLASSICAL-Testing: Ph1-CLASSICAL-Testing Ph2-CLASSICAL-Testing
 
 REDUCTION-Testing: Ph1-REDUCTION-Testing Ph2-REDUCTION-Testing
 
 APSLQ-Testing: Ph1-APSLQ-Testing Ph2-APSLQ-Testing
 
-PSLQ-Testing: Ph1-PSLQ-Testing Ph2-PSLQ-Testing
+# Targets for testing LLL and PSLQ subcases of the conceptual groups which may use either (classical algebraic relations, and REDUCTION method).
+CLASSICAL-LLL-Testing: Ph1-CLASSICAL-LLL-Testing Ph2-CLASSICAL-LLL-Testing
 
-LLL-Testing: Ph1-LLL-Testing Ph2-LLL-Testing
+CLASSICAL-PSLQ-Testing: Ph1-CLASSICAL-PSLQ-Testing Ph2-CLASSICAL-PSLQ-Testing
+
+REDUCTION-LLL-Testing: Ph1-REDUCTION-LLL-Testing Ph2-REDUCTION-LLL-Testing
+
+REDUCTION-PSLQ-Testing: Ph1-REDUCTION-PSLQ-Testing Ph2-REDUCTION-PSLQ-Testing
 
 #  = All output files rely on its base TestFile (from Sets/), and stress-test-common.mpl.                  =
 #  = Note we need to use the sed command to properly tease out the base file from the output file name.    =

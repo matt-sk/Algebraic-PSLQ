@@ -3,6 +3,7 @@
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =- 
 $ifdef __INPUT
 	INPUT := __INPUT:
+	printf( "INPUT: %a, __INPUT, %a\n", INPUT, __INPUT ):
 $endif
 
 $ifdef __OUTPUT
@@ -13,10 +14,36 @@ $ifdef __PHASE
 	PHASE := __PHASE:
 $endif
 
-# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
-# -= Callback function declaration.                                                                                =-
-# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
-# -= These are function hooks that can be over-ridden by the scripts using this common framework                   =-
+# Function to output error messages and terminate the program. Don't take the name too seriously.
+TerminateAndCatchFire := proc( errorcode::integer )
+	description " Mimick the output of an error call before quitting with an error value.";
+	local str := "":
+
+	if lastexception[1] <> 0 then str := sprintf( " (in %a)", lastexception[1] ) fi;
+	printf( "%s: Error,%s %s\n", OUTPUT, str, StringTools[FormatMessage](lastexception[2..-1]) );
+	`quit`( errorcode ):	
+end proc:
+
+# Process input and output 
+try
+	if (not assigned(OUTPUT)) or (OUTPUT=default) or (not type(OUTPUT,string)) then
+		OUTPUT := "/dev/stdout":
+	end if:
+	outfile := fopen( OUTPUT, WRITE, TEXT );
+
+	if not assigned(INPUT) then
+		ERROR( "no input file" ):
+	else
+		testfile := fopen( INPUT, READ, TEXT ):
+	end if:
+
+	SnapshotFileName := cat( ".", FileTools[Filename](OUTPUT), ".snapshot.m" ):
+
+catch :
+	TerminateAndCatchFire( 1 ):
+
+end try:
+
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 
 # Note that the calc input for many of these might be a vector or list (the calculated integer relation) or it might be FAIL if the calculation went awry somehow.
@@ -25,6 +52,7 @@ $endif
 # The TEST() function needs to be set by the specific test script.
 # Note that this must be a function so the error is raised inside the try-catch block below.
 if not assigned( TEST ) then
+WARNING( "Reassigning TEST" ):
 	TEST := proc( xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )
 		error "TEST Function needs to be Redefined";
 	end proc;
@@ -61,8 +89,8 @@ end if:
 # EXTRAOUTPUT(): Function run after standard outputting is performed, but before newline is output.
 # result will be one of GOOD, BAD, FAIL, or UNEXPECTED
 if not assigned( EXTRAOUTPUT ) then
-	EXTRAOUTPUT := proc( result, relation, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::string;
-		return "";
+	EXTRAOUTPUT := proc( result, relation, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::table;
+		return table();
 	end proc:
 end if:
 
@@ -82,7 +110,7 @@ end if:
 # This function checks the result of a computation.
 # To be passed in for testing.
 CHECK := proc( calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, ans::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )
-	local mult, XX1, rel, preResult, result, relation, savedUnexpectedRelation, savedBadRelation;
+	local k, mult, XX1, rel, preResult, result, relation, savedUnexpectedRelation, savedBadRelation;
 	global CHK, GOOD, BAD, UNEXPECTED;
 
 	# In the case that the result is not GOOD, CHK will store the numeric value of the expanded numeric check, and this value is appended to the output.
@@ -137,10 +165,121 @@ CHECK := proc( calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(compl
 	return POSTCHECK( result, relation, xx, D, Precision ), relation:
 end proc:
 
+CALCULATE_TEST_PROBLEM := proc( xx::~list(complexcons), ans::~list(complexcons), precision::posint, $ )
+	option remember:
+	global d:
+	local calc, rel, result, output, START, END;
+
+	# Run the integer relation computation, and time how long it takes.
+	START := time():
+	calc := TEST( xx, d, precision ):
+	END := time():
+
+	# Note that the calc variable may have multiple candidate relations.
+	# The CHECK function scans through these and returns the best result possible, as well as the relation (if any).
+	result,rel  := CHECK( calc, xx, ans, d, precision );
+	 
+	output := EXTRAOUTPUT(RESULT, rel, xx, d, precision);
+	output[Result] := result:
+	output[Precision] := precision:
+	output[CalculationTime] := END-START:
+	
+	if result = GOOD then
+		output[Mult] := -rel[1]:
+	elif (result = UNEXPECTED) or (result = BAD) then
+		output[Relation] := rel:
+		output[Check] := evalf[2](CHK):
+	end if:
+
+	# Return all relvant information in a table.
+	return table( [Result=result, Relation=rel, OutputData=eval(output)] ):
+end proc;
+
+# Read the script which defines the function to process the individual tests.
+# Should define PROCESS_LINE( line::table )
+processingFile := cat("stress-test-PHASE-", PHASE, ".mpl"):
+read processingFile;
+
+# Define a snapshotting wrapper for 
+try
+	# Try to read the snapshot file. If successful, this will restore the remember table from the most recent computation for the output file.
+	read( SnapshotFileName );
+
+catch :
+	# We end up here if some calamity occurs in reading the snapshot file.
+	# Usually this will be becuase we are startign a fresh computation, and the snapshot file does not yet exist.
+
+	# Set up a new function with an empty remember table.
+	PROCESS_LINE := proc( _line::string )
+		description "Run PROCESS_LINE, and store the result in a remember table.":
+		option remember:
+
+		# Process the test problem (saving the returned table).
+		local line := parse( _line, statement ):
+		local outputData := PROCESS_TEST_PROBLEM( line ): 
+
+		# Append the line ID to the output.
+		outputData[ID] := line[id]:
+
+		# Need to use eval to make sure the remember table stores the actual table and not just the literal `outputData`.
+		return eval(outputData):
+	end proc:
+
+end try:
+
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 # -= Main Processing                                                                                               =-
 # -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
 
-# Run the tests.
-processingFile := cat("stress-test-PHASE-", PHASE, ".mpl"):
-read processingFile;
+# There's no point encasing this in a try-catch block. Anyerrors in the processingFile are not passed back and caught.
+# Furthermore, without the try-catch block, any error during processingFile causes an immediate termination of computatoin (and so the snapshot file isn't removed).
+parametersString := readline(testfile):
+parameters := parse( parametersString, 'statement' );
+
+consts := parameters[consts];
+d := parameters[affix]:
+coeffDigits := parameters[digits]:
+
+SETUP( d, coeffDigits ):
+GOODcount,BADcount,UNEXPECTEDcount,FAILcount := 0,0,0,0:
+
+START := time():
+
+# lineCount should agree with line[id] from the input file, but it doesn' tmatter if it doesn't.
+# We just use it for a unique input into the PROCESS_LINE file so that each input has a saved output.
+do 
+	# Read the line
+	line := readline( testfile ):
+	if line = 0 then break: fi:
+	
+	# Read and process the line.
+	OutputData := PROCESS_LINE( line ): #parse(line, statement) ):
+
+	# CHeck for termination condition (end of file)
+	if OutputData = EOF then break: fi:
+
+	# Snapshot the progress.
+	save( PROCESS_LINE, SnapshotFileName ):
+
+	# Extract the result.
+	result := OutputData[Result]:
+
+	# Increment the count for this result (GOODcount, BADcount, etc)
+	cat(result,count) := eval(cat(result,count)) + 1;
+
+	# Output the results.
+	fprintf( outfile, "%a\n", eval(OutputData) ):	
+end do:
+
+END := time():
+
+# Print out a completion message with time taken to process and result counts.
+printf("%s complete. %a seconds duration. %a good examples, %a unexpected examples, %a bad examples, %a fails.\n", OUTPUT, END-START, GOODcount, UNEXPECTEDcount, BADcount, FAILcount);
+
+# Clean up.
+fclose( testfile ):
+fclose( outfile ):
+fremove( SnapshotFileName ):
+
+TIDYUP():
+

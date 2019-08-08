@@ -12,21 +12,24 @@ TEST := proc( xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)
 	return INTEGER_RELATION_FUNCTION( xx, Precision ):
 end proc:
 
-EXTRAOUTPUT := proc( result, calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::string;
-	local _extra_output := "":
+EXTRAOUTPUT := proc( result, calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::table;
+	local OutputData := table():
 	global LLL_Num_Attempts, LLL_Num_Candidates, FAILinfo:
 
+	
 	# If the result was a fail, then include the FAILinfo
 	if result = FAIL then 
-		_extra_output := cat( _extra_output, sprintf( ",FAILinfo=\"%s\"", FAILinfo ) ):
+		OutputData[FAIL_info] := FAILinfo: 
+#		_extra_output := cat( _extra_output, sprintf( ",FAILinfo=\"%s\"", FAILinfo ) ):
 	end if:
 
 	# If we computed the integer relation using LLL, then include the LLL-specivic details of the computation.
 	if INTEGER_RELATION_FUNCTION = LLL_INTEGER_RELATION then
-		_extra_output := cat( _extra_output, sprintf( ",LLL_attempts=%a,CandidateRelations=%a", LLL_Num_Attempts, LLL_Num_Candidates ) ):
+		OutputData[LLL_attempts] := LLL_Num_Attempts:
+		OutputData[LLL_candidate_relations] := LLL_Num_Candidates:
 	end if:
 
-	return _extra_output:
+	return OutputData:
 end proc:
 
 # Run the tests.

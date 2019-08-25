@@ -20,7 +20,7 @@ end proc:
 # Function to process a testfile input line. (Called by stress-test-common.mpl)
 PROCESS_TEST_PROBLEM := proc( line::table )
 	global prec:
-	local coefficients, N, x, Indices, xx, ans, calc:
+	local coefficients, N, x, Indices, xx, ans, CalcData:
 	
 	coefficients := line[coeffs]:
 	N := nops(coefficients):
@@ -31,8 +31,6 @@ PROCESS_TEST_PROBLEM := proc( line::table )
 	xx := [ x, seq(consts[k], k in Indices) ]: # Produce a list of the non-zero coefficients.
 	ans := [ -1, seq(coefficients[k], k in Indices) ]:
 
-	calc := CALCULATE_TEST_PROBLEM( xx, ans, prec ):
-
-	# We don't need to add any output data, so we simply return the output from the calculation.
-	return eval(calc[OutputData]):
+	# Run CALCULATE_TEST_PROBLEM and pass the output straight back to the caller of this procedure.
+	return CALCULATE_TEST_PROBLEM( xx, ans, prec ):
 end proc:

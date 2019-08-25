@@ -1,19 +1,3 @@
-# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =-
-# -= Preprocessing setup of I/O file names.                                                                        =-
-# -= =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= =- 
-$ifdef __INPUT
-	INPUT := __INPUT:
-	printf( "INPUT: %a, __INPUT, %a\n", INPUT, __INPUT ):
-$endif
-
-$ifdef __OUTPUT
-	OUTPUT := __OUTPUT:
-$endif
-
-$ifdef __PHASE
-	PHASE := __PHASE:
-$endif
-
 # Function to output error messages and terminate the program. Don't take the name too seriously.
 TerminateAndCatchFire := proc( errorcode::integer )
 	description " Mimick the output of an error call before quitting with an error value.";
@@ -53,7 +37,7 @@ end try:
 # Note that this must be a function so the error is raised inside the try-catch block below.
 if not assigned( TEST ) then
 WARNING( "Reassigning TEST" ):
-	TEST := proc( xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )
+	TEST := proc( xx::~list(complexcons), D::integer, Precision::posint )
 		error "TEST Function needs to be Redefined";
 	end proc;
 end if:
@@ -61,36 +45,29 @@ end if:
 # The remaining two functions are optional. If not set by the test script then the following definitions are used.
 
 # SETUP(): Function to run before processing to set up thigns that need setting up.
+# Additionally, this function is responsible for raising any fatal errors that are contingent on the particulars of the test set.
 if not assigned( SETUP ) then
 	SETUP := proc( D::integer, coeffDigits::posint )
 	end proc:
 end if:
 
 # PRECHECK(): Function run before standard results checking is run.
-# This function must return either CONTINUE to allow further checking, or one of GOOD, BAD, or FAIL to report an outcome.
+# This function must return a set of candidate relations for checking. This set must be empty to indicate a FAIL result.
 if not assigned( PRECHECK ) then
-	PRECHECK := proc( calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::boolean_constant;
+	PRECHECK := proc( calc, xx::~list(complexcons), D::integer, Precision::posint )::set;
 		if calc = FAIL then
-			return FAIL
+			return {}
 		else
-			return CONTINUE
-		end if;
+			return calc
+		end if:
 	end proc:
 end if:
 
-# POSTCHECK(): Function run before standard results checking is run.
-# This function must return GOOD, BAD, FAIL to report an outcome, or CONTINUE to allow further checking.
+# POSTCHECK(): Function run after standard results checking is run.
+# This function must return result in {GOOD, UNEXPECTED, BAD, FAIL} to report an outcome, and an output data list.
 if not assigned( POSTCHECK ) then
-	POSTCHECK := proc( result, relation, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::boolean_constant;
-		return result; # Do nothing, return the previously found result.
-	end proc:
-end if:
-
-# EXTRAOUTPUT(): Function run after standard outputting is performed, but before newline is output.
-# result will be one of GOOD, BAD, FAIL, or UNEXPECTED
-if not assigned( EXTRAOUTPUT ) then
-	EXTRAOUTPUT := proc( result, relation, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::table;
-		return table();
+	POSTCHECK := proc( result, relation, xx::~list(complexcons), D::integer, Precision::posint )
+		return result, []; # Do nothing, return the previously found result.
 	end proc:
 end if:
 
@@ -109,91 +86,84 @@ end if:
 
 # This function checks the result of a computation.
 # To be passed in for testing.
-CHECK := proc( calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, ans::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )
-	local k, mult, XX1, rel, preResult, result, relation, savedUnexpectedRelation, savedBadRelation;
-	global CHK, GOOD, BAD, UNEXPECTED;
+CHECK := proc( calc, xx::~list(complexcons), ans::~list(complexcons), D::integer, Precision::posint, $ )
+	local mult, CHK, result, rel, relation, relations, calcMult, calcRelation, calcCheck, PostCheckData:
 
-	# In the case that the result is not GOOD, CHK will store the numeric value of the expanded numeric check, and this value is appended to the output.
-	# We should initialise it to something inocuous just in case the PRECHECK causes this procedure to exit with a result other than GOOD.
-	CHK := "":
+	# Initialisation
+	result			:= FAIL:
+	calcRelation	:= NULL:
+	calcMult		:= NULL: # Default unless a GOOD result is found, in which case we overwrite this variable.
+	calcCheck		:= NULL:
 
 	# Pre Check
-	preResult := PRECHECK( calc, xx, D, Precision ):
-	if preResult <> CONTINUE then return preResult, [] fi:
+	relations := PRECHECK( calc, xx, D, Precision ):
 
-	savedUnexpectedRelation := NULL:
+	if relations <> {} then
+		# Only perform checking (including POSTCHECK) if the PRECHECK was successful.
 
-	# Check to see if the calculated relation is just an algebraic integer multiple of the known relation.
-	# To do this we calculte the multiple that turns ans[1] into calc[1] and multiply the entire ans list by this multiple.
-	# If the two lists are then the same, we found such a multiple of the known relation.
-	for relation in calc do
-		mult := -relation[1]; # We know ans[1] = -1, so if relation = k*ans for some algebraic integer k, then k=-calc[1].
-		CHK := expand(relation-ans*mult):
+		for relation in relations do
+			# Check to see if the calculated relation is just an algebraic integer multiple of the known relation.
+			# To do this we calculte the multiple that turns ans[1] into calc[1] and multiply the entire ans list by this multiple.
+			# If the two lists are then the same, we found such a multiple of the known relation.
+			mult := -relation[1]; # We know ans[1] = -1, so if relation = k*ans for some algebraic integer k, then k=-calc[1].
+			CHK := expand(relation-ans*mult):
 
-		if convert(CHK,set) = {0} then
-		   result := GOOD:
-		   CHK := 0.0: # Needed in case POSTCHECK changes the result from GOOD to somethign else.
-		   break:
-		else
-			rel := expand( add( xx[k]*relation[k], k=1..nops(xx) ) ):
-			Digits := 1000;
-			CHK := abs( evalf[1000](rel) ):
-			if CHK < 10^(-998) then
-				result := UNEXPECTED:
-				savedUnexpectedRelation := relation:
+			if convert(CHK,set) = {0} then
+				# Result is GOOD
+				result := GOOD:
+				calcMult := (Mult)=mult:
+				calcRelation := (Relation)=relation:
+				calcCheck := NULL:
+				break:
 			else
-				result := BAD:
-				savedBadRelation := relation:
+				# The result is either UNEXPECTED, or BAD
+				rel := expand( add( xx[k]*relation[k], k=1..nops(xx) ) ):
+				Digits := 1000;
+				CHK := abs( evalf[1000](rel) ):
+
+				if CHK < 10^(-998) and result in {FAIL, BAD} then
+					# Result is UNEXPECTED
+					result := UNEXPECTED:
+					calcRelation := (Relation)=relation:
+					calcCheck := (Check)=CHK:
+					# calcMult is already NULL
+				elif result = FAIL then
+					# Result is BAD
+					result := BAD:
+					calcRelation := (Relation)=relation:
+					calcCheck := (Check)=CHK:
+					# calcMult is already NULL
+				end if:
 			end if:
-		end if:
-	end do:
+		end do:
 
+		# Run the POSTCHECK.
+		result, PostCheckData := POSTCHECK( result, rhs(calcRelation), xx, D, Precision ):
 
-	# If we found a GOOD result we stop immediately. Otherwise we may have a BAD or UNEXPECTED result.
-	# If the result is BAD, check to see if we saved an UNEXPECTED result beforehand, otherwise use the .
-	if result = BAD then
-		if savedUnexpectedRelation <> NULL then:
-			result := UNEXPECTED:
-			relation := savedUnexpectedRelation:
-		else
-			relation := savedBadRelation:
-		end if:
+		# If we have a GOOD result, then the relation is entirely redundant (but was necessary for the POSTCHECK).
+		if result = GOOD then calcRelation := NULL: fi:
 	end if:
 
-#printf( " - Final: %a\n", result ):
-
-	return POSTCHECK( result, relation, xx, D, Precision ), relation:
+	# Return the result along with amalgamated output table data for this CHECK.
+	# Note that some of these may be NULL, in which case they vanish.
+	return result, [ calcMult, calcRelation, calcCheck, op(PostCheckData) ]:
 end proc:
 
 CALCULATE_TEST_PROBLEM := proc( xx::~list(complexcons), ans::~list(complexcons), precision::posint, $ )
-	option remember:
-	global d:
-	local calc, rel, result, output, START, END;
+	local calc, START, END, result, CheckData, TestData;
 
 	# Run the integer relation computation, and time how long it takes.
 	START := time():
-	calc := TEST( xx, d, precision ):
+	calc, TestData := TEST( xx, d, precision ):
 	END := time():
 
 	# Note that the calc variable may have multiple candidate relations.
 	# The CHECK function scans through these and returns the best result possible, as well as the relation (if any).
-	result,rel  := CHECK( calc, xx, ans, d, precision );
-	 
-	output := EXTRAOUTPUT(RESULT, rel, xx, d, precision);
-	output[Result] := result:
-	output[Precision] := precision:
-	output[CalculationTime] := END-START:
-	
-	if result = GOOD then
-		output[Mult] := -rel[1]:
-	elif (result = UNEXPECTED) or (result = BAD) then
-		output[Relation] := rel:
-		output[Check] := evalf[2](CHK):
-	end if:
+	result, CheckData := CHECK( calc, xx, ans, d, precision ):
 
-	# Return all relvant information in a table.
-	return table( [Result=result, Relation=rel, OutputData=eval(output)] ):
-end proc;
+	# Return the result along with amalgamated output table data for this run.
+	return result, [ (PrecisionUsed) = precision, (CalculationTime) = END-START, op(CheckData), op(TestData) ]:
+end proc:
 
 # Read the script which defines the function to process the individual tests.
 # Should define PROCESS_LINE( line::table )
@@ -214,15 +184,14 @@ catch :
 		description "Run PROCESS_LINE, and store the result in a remember table.":
 		option remember:
 
+		local line, result, OutputData:
+
 		# Process the test problem (saving the returned table).
-		local line := parse( _line, statement ):
-		local outputData := PROCESS_TEST_PROBLEM( line ): 
+		line := parse( _line, statement ):
+		result, OutputData := PROCESS_TEST_PROBLEM( line ): # Defined in stress-test-PHASE-n.mpl
 
-		# Append the line ID to the output.
-		outputData[ID] := line[id]:
-
-		# Need to use eval to make sure the remember table stores the actual table and not just the literal `outputData`.
-		return eval(outputData):
+		# Construct and return the output table data.
+		return [ (ID)=line[id], (Result)=result, op( OutputData ) ]:
 	end proc:
 
 end try:
@@ -240,46 +209,43 @@ consts := parameters[consts];
 d := parameters[affix]:
 coeffDigits := parameters[digits]:
 
-try
+# Set up the processing for the test set. Terminate if an ERROR is raised.
+try 
 	SETUP( d, coeffDigits ):
 catch:
 	TerminateAndCatchFire( 1 ):
 end try:
 
-GOODcount,BADcount,UNEXPECTEDcount,FAILcount := 0,0,0,0:
+ResultCount := table( [GOOD=0, UNEXPECTED=0, BAD=0, FAIL=0] ):
 
+# OutputData := table():
 START := time():
 
 # lineCount should agree with line[id] from the input file, but it doesn' tmatter if it doesn't.
 # We just use it for a unique input into the PROCESS_LINE file so that each input has a saved output.
 do 
-	# Read the line
+	# Read the line (and break loop if end of file)
 	line := readline( testfile ):
 	if line = 0 then break: fi:
-	
-	# Read and process the line.
-	OutputData := PROCESS_LINE( line ): #parse(line, statement) ):
 
-	# CHeck for termination condition (end of file)
-	if OutputData = EOF then break: fi:
+	# Process the line.
+	outputData := PROCESS_LINE(line): 
 
 	# Snapshot the progress.
 	save( PROCESS_LINE, SnapshotFileName ):
 
-	# Extract the result.
-	result := OutputData[Result]:
+	# Update result counts. (global OutputData table created by PROCESS_LINE)
+	result := rhs( outputData[2] ): # Result is guaranteed to be the 2nd element of the returned list.
+	ResultCount[result] := ResultCount[result] + 1:
 
-	# Increment the count for this result (GOODcount, BADcount, etc)
-	cat(result,count) := eval(cat(result,count)) + 1;
-
-	# Output the results.
-	fprintf( outfile, "%a\n", eval(OutputData) ):	
+	# Output the results. (Due to the wierd ordering above, we construct the table with the string for the argument list)
+	fprintf( outfile, "table(%a)\n", outputData ):
 end do:
 
 END := time():
 
 # Print out a completion message with time taken to process and result counts.
-printf("%s complete. %a seconds duration. %a good examples, %a unexpected examples, %a bad examples, %a fails.\n", OUTPUT, END-START, GOODcount, UNEXPECTEDcount, BADcount, FAILcount);
+printf("%s complete. %a seconds duration. %a good examples, %a unexpected examples, %a bad examples, %a fails.\n", OUTPUT, END-START, ResultCount[GOOD], ResultCount[UNEXPECTED], ResultCount[BAD], ResultCount[FAIL]);
 
 # Clean up.
 fclose( testfile ):

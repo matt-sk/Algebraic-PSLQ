@@ -1,8 +1,3 @@
-# Preprocessor conversion from defines to variables.
-$ifdef __INTEGER_RELATION_FUNCTION
-	INTEGER_RELATION_FUNCTION := __INTEGER_RELATION_FUNCTION:
-$endif
-
 # Determine whether or not we are using PSLQ or LLL.
 if (not assigned(INTEGER_RELATION_FUNCTION)) then
 	WARNING( "INTEGER_RELATION_FUNCTION not defined. Defaulting to INTEGER_RELATION_FUNCTION=PSLQ.");
@@ -18,7 +13,6 @@ fi;
 LLL_INTEGER_RELATION := proc( x::~Vector[column](realcons), Precision::posint )
 	uses IntegerRelations, LinearAlgebra:
 	local xx, M, maxXX, K, k, n, calc, evaluate, rows, Id, epsilon:
-	global LLL_Num_Attempts, LLL_Num_Candidates, FAILinfo:
 
 	# Calculate the length of the input vector.
 	n := Dimension( x ):
@@ -56,7 +50,7 @@ LLL_INTEGER_RELATION := proc( x::~Vector[column](realcons), Precision::posint )
 			# Try to find integer relations using LLL (making sure we're not using integer arithmetic)
 			calc := LLL( M, :-integer=false ):
 			forget( LLL ):	# Needed to clear the remember table so that LLL calculates the next iteration properly. 
-								# (Not 100% sure why this is necessary, but it is something to do with the inplace ColumnOperation below).
+							# (Not 100% sure why this is necessary, but it is something to do with the inplace ColumnOperation below).
 
 			# Find any row which has final entry less than 1 (this may have an linear relation)
 			# Note: ideally we're looking for 0 in the last entry, but searching for anything less than 1 seems, experimentally, to work fine.
@@ -74,33 +68,28 @@ LLL_INTEGER_RELATION := proc( x::~Vector[column](realcons), Precision::posint )
 		end try:
 	end do:
 
-	# Record number of LLL runs to find a relation at all, and number of candidate relations found
-	LLL_Num_Attempts := K - k: # k will be decremented one extra time by the loop, but this is gives the correct count since we start at k=K.
-	LLL_Num_Candidates := numelems( rows ):
-
 	# If we get to this point, then either we found posisble integer relations (for some value of k)
 	# or we got to k=1 without finding any posisble relation.
+	# We return the appropirate result, and 
 	if rows = {} then
-		FAILinfo := "No candidate relations found for this precision":
-		return FAIL:
+		# Return FAIL, and an appropriate output data table containing FAIL_info and appropriate LLL computation info.
+		return FAIL, [ (FAIL_info) = "No candidate relations found for this precision", (LLL_attempts) = K - k ]:
 	else
-		return map2( map, trunc, rows ): # Make sure each element of each candidate relation is an integer.
+		# Truncate each element of each candidate relation to ensure it is an integer.
+		# We return the result of this, along with the  output table data for this LLL integer relation computation.
+		return map2( map, trunc, rows ), [ (`LLL InitialN`) = evalf[1](10^K), (`LLL FinalN`) = evalf[1](10^(k+1)), (`LLL Attempts`) = K - k, (`LLL CandidateRelations`) = numelems(rows) ]: 
 	end if:
 end proc:
 
 # Function to calculate an integer relation using PSLQ. Saves the time taken.
-PSLQ_INTEGER_RELATION := proc( xx::~Vector[column](complexcons), Precision::posint )
+PSLQ_INTEGER_RELATION := proc( xx::~list(complexcons), Precision::posint )
 	uses IntegerRelations:
 	local calc:
-	global FAILinfo:
-
-	# Make sure FAILinfo is an empty string so that EXTRAOUTPUT functions which expect it may use of it without error.
-	FAILinfo := "":
 
 	# Set precision and run PSLQ to find a candidate integer relation.
 	Digits := Precision:
 	calc := PSLQ( xx ):
 
-	# Convert the candidate integer relation to a list, and return that list as the only element of a singleton set.
-	return { convert( calc, list ) }:
+	# Return the calcualted relation as the only element of a singleton set, and an empty list of output data.
+	return { calc }, []:
 end proc:

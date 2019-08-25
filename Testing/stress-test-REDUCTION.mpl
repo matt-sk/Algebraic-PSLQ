@@ -1,16 +1,23 @@
+# Read the definitions of the integer relation computing functions  (PSLQ_ and LLL_INTEGER_RELATION).
 read "IntegerRelationFunctions.mpl":
 
-# Set up functions used by stress-test-common.mpl
-TEST := proc( xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )
-	local omega, xxE, calc, recover:
-	uses IntegerRelations:
+# Define functions used by stress-test-common.mpl
 
-	if abs(D) in {0,1} then
-		error "Pointless using REDUCTION method for a classical integer relation":
-	elif INTEGER_RELATION_FUNCTION = LLL_INTEGER_RELATION and D < 0 then
+# SETUP(): Function to run before processing to set up thigns that need setting up.
+# Additionally, this function is responsible for raising any fatal errors that are contingent on the particulars of the test set.
+SETUP := proc( D::integer, coeffDigits::posint )
+	global INTEGER_RELATION_FUNCTION:
+
+	if INTEGER_RELATION_FUNCTION = LLL_INTEGER_RELATION and D < 0 then
 		error "Cannot use LLL for complex quadratic extensions":
-	end if:
-	
+	elif abs(D) in {0,1} then
+		error "Pointless using REDUCTION method for a classical integer relation":
+	end if:	
+end proc:
+
+TEST := proc( xx::~list(complexcons), D::integer, Precision::posint )
+	local omega, xxE, CalcRelations, CalcData, recover:
+
 	# Set the precision. We need this now so that our calculation of xxE is correct.
 	Digits := Precision:
 
@@ -19,13 +26,17 @@ TEST := proc( xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)
 	xxE := map( x -> (x, omega*x), xx ):
 
 	# Run the integer relation finding function
-	calc := INTEGER_RELATION_FUNCTION(xxE, Precision):
+	CalcRelations, CalcData := INTEGER_RELATION_FUNCTION(xxE, Precision):
 
 	# Function to recover the algebraic integer relations from the PSLQ output.
 	recover := rel -> [ seq( expand(rel[2*k-1]+omega*rel[2*k]), k = 1 .. (nops(xxE)/2 ) ) ]:
 
-	# Only recover the relation if we didn't encouter a FAIL result (which is unlikely, but possible);
-	return piecewise( calc=FAIL, FAIL, map( recover, calc ) ):
+	# We return either FAIL, or the set of Candidate relations, and pass through the output table data (CalcData).
+	if CalcRelations = FAIL then
+		return FAIL, CalcData:
+	else
+		return map(recover, CalcRelations), CalcData:
+	end if:
 end proc:
 
 # Type declarations for the specific algebraic integers we need to test for.
@@ -68,47 +79,26 @@ end proc:
 	return (aIsInteger and bIsInteger and parityIsCorrect);
 end proc:
 
-POSTCHECK := proc( result, calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::boolean_constant;
+# POSTCHECK(): Function run after standard results checking is run.
+# This function must return result in {GOOD, UNEXPECTED, BAD, FAIL} to report an outcome, and an output data list.
+POSTCHECK := proc( result, relation, xx::~list(complexcons), D::integer, Precision::posint )
 	local chk:
-	global ORIG_RESULT:
 
-	# No post-checking needed for the real case (or even for Gaussian integers, since REDUCTION is pointless in that case)
-	if D >= -1 then return result: fi:
+	# No post-checking needed for real test sets (or even for Gaussian integers, since REDUCTION is pointless in that case)
+	if D >= -1 then return result, []: fi:
 
-	# We only need to do additional checking if the result was GOOD
-	if result <> GOOD then return result: fi:
+	# We only need to do additional checking if the result was not already a FAIL.
+	if result = FAIL then return result, []: fi:
 
 	# We check to make sure that the elements of the integer relation are, in fact, quadratic integers from the correct sinple quadratic extension field.
 	chk := { seq( type(calc[k], SmplCplxQuadInt(D) ), k=1..nops(xx) ) }:
 	if `and`( op(chk) ) then
-		return result: # Result should be good, but whatever it is, it's preserved.
+		# No change to result. Return it with an empty list of output table data.
+		return result, []: # Result should be GOOD, but whatever it is, it's preserved.
 	else
-		ORIG_RESULT := result:
-		return FAIL:
+		# Change the result to FAIL, which we return along with the original result saved as an entry in the output table data.
+		return FAIL, [ (OriginalResult) = result ]:
 	end if:
-end proc:
-
-
-EXTRAOUTPUT := proc( result, calc, xx::{list(complexcons),'Vector'(complexcons),'vector'(complexcons)}, D::integer, Precision::posint )::string;
-	local _extra_output := "":
-	global ORIG_RESULT, LLL_Num_Attempts, LLL_Num_Candidates, FAILinfo:
-
-	# If we get a FAIL result, then we need to know the original result, because we may have had a GOOD result that was rejected due to not having quadratic integers from the correct extension field.
-	if result = FAIL then
-		_extra_output := cat( _extra_output, sprintf( ",OriginalResult=%s", ORIG_RESULT ) ):
-	end if:
-
-	# If the original result was a fail, then include the FAILinfo
-	if ORIG_RESULT = FAIL then
-		_extra_output := cat( _extra_output, sprintf( ",FAILinfo=\"%s\"", FAILinfo ) ):
-	end if:
-
-	# If we computed the integer relation using LLL, then include the LLL-specivic details of the computation.
-	if INTEGER_RELATION_FUNCTION = LLL_INTEGER_RELATION then
-		_extra_output := cat( _extra_output, sprintf( ",LLL_attempts=%a,CandidateRelations=%a", LLL_Num_Attempts, LLL_Num_Candidates ) ):
-	end if:
-
-	return _extra_output:
 end proc:
 
 # Run the tests.

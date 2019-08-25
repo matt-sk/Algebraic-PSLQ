@@ -240,7 +240,12 @@ consts := parameters[consts];
 d := parameters[affix]:
 coeffDigits := parameters[digits]:
 
-SETUP( d, coeffDigits ):
+try
+	SETUP( d, coeffDigits ):
+catch:
+	TerminateAndCatchFire( 1 ):
+end try:
+
 GOODcount,BADcount,UNEXPECTEDcount,FAILcount := 0,0,0,0:
 
 START := time():

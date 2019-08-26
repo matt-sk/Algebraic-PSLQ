@@ -73,7 +73,7 @@ LLL_INTEGER_RELATION := proc( x::~Vector[column](realcons), Precision::posint )
 	# We return the appropirate result, and 
 	if rows = {} then
 		# Return FAIL, and an appropriate output data table containing FAIL_info and appropriate LLL computation info.
-		return FAIL, [ (FAIL_info) = "No candidate relations found for this precision", (LLL_attempts) = K - k ]:
+		return FAIL, [ (FAIL_info) = "No candidate relations found for this precision", (`LLL InitialN`) = evalf[1](10^K), (LLL_attempts) = K - k ]:
 	else
 		# Truncate each element of each candidate relation to ensure it is an integer.
 		# We return the result of this, along with the  output table data for this LLL integer relation computation.

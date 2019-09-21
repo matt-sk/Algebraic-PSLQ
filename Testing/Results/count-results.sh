@@ -8,10 +8,10 @@
 get_counts( ) {
 	local RESULTSFILE=${1}
 
-	BADCOUNT=$(grep '(Result)=BAD' ${RESULTSFILE} | wc -l)
-	FAILCOUNT=$(grep '(Result)=FAIL' ${RESULTSFILE} | wc -l)
-	UNEXPECTEDCOUNT=$(grep '(Result)=UNEXPECTED' ${RESULTSFILE} | wc -l)
-	GOODCOUNT=$(grep '(Result)=GOOD' ${RESULTSFILE} | wc -l)
+	BADCOUNT=$(grep ', Result = BAD' ${RESULTSFILE} | wc -l)
+	FAILCOUNT=$(grep ', Result = FAIL' ${RESULTSFILE} | wc -l)
+	UNEXPECTEDCOUNT=$(grep ', Result = UNEXPECTED' ${RESULTSFILE} | wc -l)
+	GOODCOUNT=$(grep ', Result = GOOD' ${RESULTSFILE} | wc -l)
 }
 
 # An exhaustive list of all methods in the order they should appear in tables.

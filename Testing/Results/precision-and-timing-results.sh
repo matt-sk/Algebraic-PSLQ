@@ -15,13 +15,13 @@ mkfifo ${TEMPFOLDER}/PRECISION_DATA
 # Set a trap to remove any temp files that have been created during the processing.
 # Using a trap means that temp files are deleted even if the script ends prematurely.
 function cleanup {
-	if [ -d "${TEMPFOLDER}" ]; then 
+	if [ -d "${TEMPFOLDER}" ]; then
 		rm -Rf ${TEMPFOLDER}
 	fi
 }
 
 function CreateNewTEMPFILE {
-	TEMPFILE=$(mktemp --tmpdir=${TEMPFOLDER})
+	TEMPFILE=$(mktemp ${TEMPFOLDER}/XXXX)
 }
 
 trap cleanup EXIT
@@ -44,7 +44,7 @@ for INPUT_FILE in "$@";  do
 
 	# There will always be a single PSLQ file (either -CLASSICAL-PSLQ or -REDUCTION-PSLQ)
 	BASEFILE=$(basename ${INPUT_FILE})
-	PSLQ_FILES=$(find Phase2/ | grep -F ${BASEFILE} | grep "PSLQ$")
+	PSLQ_FILES=$(find Phase2 | grep -F ${BASEFILE} | grep "PSLQ$")
 
 	for PSLQ_FILE in ${PSLQ_FILES}; do
 		# Extract the classical integer relation method (either CLASSICAL, or REDUCTION) from the PSLQ file name.
@@ -58,7 +58,7 @@ for INPUT_FILE in "$@";  do
 		CreateNewTEMPFILE
 		HEADER="Original Id,Digit Count (Max),Digit Count (Total),Theoretical Min Precision"
 		PASTEFILES="${ID_AND_COUNT_FILE} ${TEMPFILE}"
-		sed 's/^.*,(TheoreticalMinPrecision)=\([0-9]*\),.*$/\1/g' ${PSLQ_FILE} > ${TEMPFILE};
+		sed 's/^.*, TheoreticalMinPrecision = \([0-9]*\),.*$/\1/g' ${PSLQ_FILE} > ${TEMPFILE};
 
 		# For each method we extract the runtime precision used, and time taken from the corresponding results. 
 		# Some of these won't exist, in which case We simply produce empty colmns for the CSV data.
@@ -80,8 +80,8 @@ for INPUT_FILE in "$@";  do
 			if [ -r "${RESULTS_FILE}" ]; then
 				# Create each column separately (in the background), and write to a FIFO
 				# We remove any incomplete lines first before processing.
-				sed -e '/[^]][^)]$/d' -e 's/^.*(CalculationTime)=\([^,]*\).*$/\1/' ${RESULTS_FILE} > $TEMPFOLDER/TIMING_DATA &
-				sed -e '/[^]][^)]$/d' -e 's/^.*(Precision)=\([^,]*\).*$/\1/' ${RESULTS_FILE} > $TEMPFOLDER/PRECISION_DATA &
+				sed -e '/[^]][^)]$/d' -e 's/^.* CalculationTime = \([^,]*\).*$/\1/' ${RESULTS_FILE} > $TEMPFOLDER/TIMING_DATA &
+				sed -e '/[^]][^)]$/d' -e 's/^.* PrecisionUsed = \([^,]*\).*$/\1/' ${RESULTS_FILE} > $TEMPFOLDER/PRECISION_DATA &
 
 				# Combine the columns in the FIFO's into CSV columns stored in ${TEMPFILE}
 				paste -d, ${TEMPFOLDER}/TIMING_DATA ${TEMPFOLDER}/PRECISION_DATA > ${TEMPFILE}

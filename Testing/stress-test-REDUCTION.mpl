@@ -91,7 +91,8 @@ POSTCHECK := proc( result, relation, xx::~list(complexcons), D::integer, Precisi
 	if result = FAIL then return result, []: fi:
 
 	# We check to make sure that the elements of the integer relation are, in fact, quadratic integers from the correct sinple quadratic extension field.
-	chk := { seq( type(calc[k], SmplCplxQuadInt(D) ), k=1..nops(xx) ) }:
+	chk := map( type, relation, SmplCplxQuadInt(D) ):
+
 	if `and`( op(chk) ) then
 		# No change to result. Return it with an empty list of output table data.
 		return result, []: # Result should be GOOD, but whatever it is, it's preserved.

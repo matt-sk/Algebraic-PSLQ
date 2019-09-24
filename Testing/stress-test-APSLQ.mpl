@@ -119,7 +119,7 @@ TEST := proc( xx::~list(complexcons), D::integer, Precision::posint )
 	else
 		# Return the calcualted relation as the only element of a singleton set, along with the output table data for this APSLQ integer relation computation.
 		# Note that the miny diagnostics gives a list of all of the minimum y values from the computations. Nops is therefore the number of iterations.
-		return { calc }, [ (`APSLQ Iterations`) = nops(diagnostics[miny]), (`APSLQ Significance`) = diagnostics[sig], (`APSLQ Warning`) = diagnostics[warning] ];
+		return { calc. [] }, [ (`APSLQ Iterations`) = nops(diagnostics[miny]), (`APSLQ Significance`) = diagnostics[sig], (`APSLQ Warning`) = diagnostics[warning] ];
 	end if:
 end proc:
 

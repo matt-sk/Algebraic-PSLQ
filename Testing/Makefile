@@ -19,7 +19,7 @@ CLASSICAL-Complex-TestSets := $(foreach c,$(CONSTANTS),$(CLASSICAL-Complex-TestS
 CLASSICAL-Complex-TestSets := $(foreach c,$(COEFFICIENTS),$(CLASSICAL-Complex-TestSets:%=%-${c}-coefficients))
 
 CLASSICAL-PSLQ-TestSets := $(CLASSICAL-Real-TestSets) $(CLASSICAL-Complex-TestSets)
-CLASSICAL-LLL-TestSets := $(CLASSICAL-Real-TestSets)
+CLASSICAL-LLL-TestSets := $(CLASSICAL-Real-TestSets) $(CLASSICAL-Complex-TestSets)
 
 #  = REDUCTION Test Sets                                                                                   =
 REDUCTION-Real-Affixes := 2 3 5 6 7 10 11
@@ -34,9 +34,9 @@ REDUCTION-Complex-TestSets := $(foreach c,$(CONSTANTS),$(REDUCTION-Complex-TestS
 REDUCTION-Complex-TestSets := $(foreach c,$(COEFFICIENTS),$(REDUCTION-Complex-TestSets:%=%-${c}-coefficients))
 
 REDUCTION-PSLQ-TestSets := $(REDUCTION-Real-TestSets) $(REDUCTION-Complex-TestSets)
-REDUCTION-LLL-TestSets := $(REDUCTION-Real-TestSets)
+REDUCTION-LLL-TestSets := $(REDUCTION-Real-TestSets) $(REDUCTION-Complex-TestSets)
 
-#  = APSLQ Test Sets (all are complex except for the usual real case)                                      =
+#  = APSLQ Test Sets (all are complex except for the usual real classical case)                            =
 APSLQ-gamma_1-Affixes := -1 -2 -3 -7 -11
 APSLQ-no_gamma_1-Affixes :=  -5 -6 -10 
 

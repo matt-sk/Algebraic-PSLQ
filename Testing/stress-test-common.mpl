@@ -87,7 +87,7 @@ end if:
 # This function checks the result of a computation.
 # To be passed in for testing.
 CHECK := proc( calc, xx::~list(complexcons), ans::~list(complexcons), D::integer, Precision::posint, $ )
-	local mult, CHK, result, rel, relation, relations, calcMult, calcRelation, calcCheck, PostCheckData:
+	local mult, CHK, result, rel, relation, candidate, candidates, candidateSpecificInfo, calcMult, calcRelation, calcCheck, PostCheckData:
 
 	# Initialisation
 	result			:= FAIL:
@@ -96,12 +96,15 @@ CHECK := proc( calc, xx::~list(complexcons), ans::~list(complexcons), D::integer
 	calcCheck		:= NULL:
 
 	# Pre Check
-	relations := PRECHECK( calc, xx, D, Precision ):
+	candidates := PRECHECK( calc, xx, D, Precision ):
 
-	if relations <> {} then
+	if candidates <> {} then
 		# Only perform checking (including POSTCHECK) if the PRECHECK was successful.
 
-		for relation in relations do
+		for candidate in candidates do
+
+			relation := candidate[1]:
+
 			# Check to see if the calculated relation is just an algebraic integer multiple of the known relation.
 			# To do this we calculte the multiple that turns ans[1] into calc[1] and multiply the entire ans list by this multiple.
 			# If the two lists are then the same, we found such a multiple of the known relation.
@@ -109,27 +112,30 @@ CHECK := proc( calc, xx::~list(complexcons), ans::~list(complexcons), D::integer
 			CHK := expand(relation-ans*mult):
 
 			if convert(CHK,set) = {0} then
-				# Result is GOOD
+				# New result is GOOD
 				result := GOOD:
+				candidateSpecificInfo := op(candidate[2]):
 				calcMult := (Mult)=mult:
 				calcRelation := (Relation)=relation:
 				calcCheck := NULL:
 				break:
 			else
-				# The result is either UNEXPECTED, or BAD
+				# The new result is either UNEXPECTED, or BAD
 				rel := expand( add( xx[k]*relation[k], k=1..nops(xx) ) ):
 				Digits := 1000;
 				CHK := abs( evalf[1000](rel) ):
 
 				if CHK < 10^(-998) and result in {FAIL, BAD} then
-					# Result is UNEXPECTED
+					# New result is UNEXPECTED (only update if old result was BAD or FAIL)
 					result := UNEXPECTED:
+					candidateSpecificInfo := op(candidate[2]):
 					calcRelation := (Relation)=relation:
 					calcCheck := (Check)=CHK:
 					# calcMult is already NULL
 				elif result = FAIL then
-					# Result is BAD
+					# New result is BAD (only update if old result was FAIL)
 					result := BAD:
+					candidateSpecificInfo := op(candidate[2]):
 					calcRelation := (Relation)=relation:
 					calcCheck := (Check)=CHK:
 					# calcMult is already NULL
@@ -146,7 +152,7 @@ CHECK := proc( calc, xx::~list(complexcons), ans::~list(complexcons), D::integer
 
 	# Return the result along with amalgamated output table data for this CHECK.
 	# Note that some of these may be NULL, in which case they vanish.
-	return result, [ calcMult, calcRelation, calcCheck, op(PostCheckData) ]:
+	return result, [ calcMult, calcRelation, calcCheck, candidateSpecificInfo, op(PostCheckData) ]:
 end proc:
 
 CALCULATE_TEST_PROBLEM := proc( xx::~list(complexcons), ans::~list(complexcons), precision::posint, $ )

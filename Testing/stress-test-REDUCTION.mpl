@@ -6,23 +6,30 @@ read "IntegerRelationFunctions.mpl":
 # SETUP(): Function to run before processing to set up thigns that need setting up.
 # Additionally, this function is responsible for raising any fatal errors that are contingent on the particulars of the test set.
 SETUP := proc( D::integer, coeffDigits::posint )
-	global INTEGER_RELATION_FUNCTION, LLL_INTEGER_RELATION:
+	global INTEGER_RELATION_FUNCTION, LLL_INTEGER_RELATION, TEST:
+
+	# The default TEST is REDUCTION_TEST. We over-ride this below in the one case where that is not the case
+	TEST := REDUCTION_TEST:
 
 	if abs(D) in {0,1} then
 		error "Pointless using REDUCTION method for a classical integer relation":
 	elif INTEGER_RELATION_FUNCTION = LLL_INTEGER_RELATION then
 		if D < 0 then
-			LLL_INTEGER_RELATION := LLL_INTEGER_RELATION_COMPLEX
+			LLL_INTEGER_RELATION := LLL_INTEGER_RELATION_COMPLEX_ALGEBRAIC(D):
+
+			# A different reduction is baked into the LLL_INTEGER_RELATION_COMPLEX_ALGEBRAIC function, so we don't need to do it in the TEST function.
+			TEST := DIRECT_TEST: 
 		else
-			LLL_INTEGER_RELATION := LLL_INTEGER_RELATION_REAL
+			LLL_INTEGER_RELATION := LLL_INTEGER_RELATION_REAL_CLASSICAL:
 		end if:
 	end if:	
 end proc:
 
-TEST := proc( xx::~list(complexcons), D::integer, Precision::posint )
+# Function to perform the reduction
+REDUCTION_TEST := proc( xx::~list(complexcons), D::integer, Precision::posint )
 	local omega, xxE, CalcCandidates, CalcData, recover:
 
-	# Set the precision. We need this now so that our calculation of xxE is correct.
+	# Set the precision. This is also set in INTEGER_RELATION_FUNCTION(), however we need it now so that our calculation of xxE is correct.
 	Digits := Precision:
 
 	# We extend the input list by taking each element, x,  and replacing it with x, omega*x
@@ -42,6 +49,11 @@ TEST := proc( xx::~list(complexcons), D::integer, Precision::posint )
 	else
 		return map(recover, CalcCandidates), CalcData:
 	end if:
+end proc:
+
+# Function to test.
+DIRECT_TEST := proc( xx::~list(complexcons), D::integer, Precision::posint )
+	return INTEGER_RELATION_FUNCTION( xx, Precision ):
 end proc:
 
 # Type declarations for the specific algebraic integers we need to test for.

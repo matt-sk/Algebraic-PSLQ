@@ -9,11 +9,16 @@ else
 	INTEGER_RELATION_FUNCTION := piecewise( is(INTEGER_RELATION_FUNCTION = PSLQ), PSLQ_INTEGER_RELATION, LLL_INTEGER_RELATION ):
 fi;
 
-# We define utility functions for LLL. It is up to the SETUP() function to define LLL_CREATE_LATTICE_MATRIX, LLL_UPDATE_LATTICE_MATRIX, and LLL_FORMAT_CANDIDATE appropriately.
+# We define utility functions for LLL. It is up to the SETUP() function to set LLL_INTEGER_RELATION to the appropriate LLL_INTEGER_RELATION_* function.
 
+# Default function to catch any oversight wherein LLL_INTEGER_RELATION is not properly set.
+# This function should be over-ridden in a SETUP() function for the relevant testing method.
+LLL_INTEGER_RELATION := proc( x::~Vector[column](realcons), Precision::posint )
+	ERROR( "Must choose between LLL_INTEGER_RELATION_REAL_CLASSICAL() and LLL_INTEGER_RELATION_COMPLEX_ALGEBRAIC(d)."):
+end proc:
 
-
-LLL_INTEGER_RELATION_REAL := proc( x::~Vector[column](realcons), Precision::posint )
+# Function for computing integer relations for the real classical cases.
+LLL_INTEGER_RELATION_REAL_CLASSICAL := proc( x::~Vector[column](realcons), Precision::posint )
 
 	uses LinearAlgebra:
 	
@@ -44,61 +49,82 @@ LLL_INTEGER_RELATION_REAL := proc( x::~Vector[column](realcons), Precision::posi
 		end proc
 	):
 
-	Digits := Precision:
 
 	# Create the matrix represneting the lattice.
-	M := < IdentityMatrix( n ) | 10^(Precision-1)*map( evalf, x ) >:
+	M := < IdentityMatrix( n ) | 10^(Precision-1) * x >:
 
 	# Run the worker function
-	return DO_LLL_INTEGER_RELATION( M, Precision-1 ):
+	Digits := Precision:
+	return DO_LLL_INTEGER_RELATION( map(evalf, M), Precision-1 ):
 
 end proc:
 
-LLL_INTEGER_RELATION_COMPLEX := proc( x::~Vector[column](complexcons), Precision::posint )
-	uses LinearAlgebra:
+# Function to create a precedure for complex algebraic LLL reduction for Q[sqrt(d)] (note this also covers the classical complex case).
+# LLL_INTEGER_RELATION_COMPLEX_ALGEBRAIC(d) returns a new procedure for computing algebraic integers in Q[sqrt(d)] using DO_LLL_INTEGER_RELATION()
+LLL_INTEGER_RELATION_COMPLEX_ALGEBRAIC := proc( d::negint )
 	
-	local M, n := Dimension( x ), discriminant1 := n + 1, discriminant2 := 2*n + 2:
+	local omega := piecewise( d mod 4 = 1, (1+sqrt(d))/2, sqrt(d) ):
 
-	# Set up utility functions.
+	# Sanity Checks
+	if d mod 4 = 0 then ERROR( "Q[sqrt(%1)] not a valid exetnsion field" ) fi:
+	# d must also be square free. It would also be good to check for square factors, but that's infeasible
 
-	# Determine if a row is a candidate.
-	global LLL_IS_CANDIDATE := subs( [ _d1 = discriminant1, _d2 = discriminant2 ],
-		proc( row::Vector(realcons), epsilon )
-			return is( abs(row[_d1]) < epsilon ) and is( abs(row[_d2]) < epsilon ):
-		end proc 
-	):
+	return subs( _OM = omega, 
+		proc( x::~Vector[column](complexcons), Precision::posint )
+			uses LinearAlgebra:
+			
+			local Id, Ze, M, N:
+			
+			local n := Dimension( x ), discriminant1 := n + 1, discriminant2 := 2*n + 2:
 
-	# The candidates must be formatted in the form [[candidateRelation], candidateOutputData].
-	# Additionally we truncate each element of each candidate relation to ensure it is an integer.
-	global LLL_FORMAT_CANDIDATE := subs( [ _n = n, _d1 = discriminant1, _d2 = discriminant2 ], 
-		proc( row::Vector(realcons) )
-			return [ [seq( trunc(row[k] + I*row[k+_d1]), k = 1.._n)], [`LLL Discriminant` = [row[_d1], row[_d2]]] ]:
+			# Set up utility functions.
+
+			# Determine if a row is a candidate.
+			global LLL_IS_CANDIDATE := subs( [ _d1 = discriminant1, _d2 = discriminant2 ],
+				proc( row::Vector(realcons), epsilon )
+					return is( abs(row[_d1]) < epsilon ) and is( abs(row[_d2]) < epsilon ):
+				end proc 
+			):
+
+			# The candidates must be formatted in the form [[candidateRelation], candidateOutputData].
+			# Additionally we truncate each element of each candidate relation to ensure it is an integer.
+			global LLL_FORMAT_CANDIDATE := subs( [ _n = n, _d1 = discriminant1, _d2 = discriminant2 ], 
+				proc( row::Vector(realcons) )
+					return [ [seq( trunc(row[k]) + _OM*trunc(row[k+_d1]), k = 1.._n)], [`LLL Discriminant` = [row[_d1], row[_d2]]] ]:
+				end proc
+			):
+
+			# Efficiently update the matrix M by reducing the discriminants by a factor of 10.
+			# Using the inplace ColumnOperation should save memory usage (compared to directly recalculating).
+			global LLL_UPDATE_LATTICE_MATRIX := subs( [ _d1 = discriminant1, _d2 = discriminant2 ],
+				proc( M::Matrix(realcons) ) # Matrices are pass by reference, so inplace operations on M will modify the original matrix
+					LinearAlgebra[ColumnOperation]( M, _d1, 1/10, inplace ):
+					LinearAlgebra[ColumnOperation]( M, _d2, 1/10, inplace ):
+				end proc
+			):
+
+			# Convert the lattice into the equivalent real lattice for LLL.
+			Id, Ze := IdentityMatrix( n ), ZeroMatrix( n ):
+			N := 10^(Precision-1):
+
+			if d mod 4 = 1 then
+				M := < Id, Ze | N * <Re(x), (1/2)*Re(x)-(1/2)*sqrt(abs(d))*Im(x)> | Ze, Id | N * <Im(x), (1/2)*Im(x)+(1/2)*sqrt(abs(d))*Re(x)> >:
+			else
+				M := < Id, Ze | N * <Re(x), -sqrt(abs(d))*Im(x)> | Ze, Id | N * <Im(x), sqrt(abs(d))*Re(x)> >:
+			end if:
+
+			# Run the worker function
+			Digits := Precision:
+			return DO_LLL_INTEGER_RELATION( map(evalf, M), Precision-1 ):
+
 		end proc
 	):
-
-	# Efficiently update the matrix M by reducing the discriminants by a factor of 10.
-	# Using the inplace ColumnOperation should save memory usage (compared to directly recalculating).
-	global LLL_UPDATE_LATTICE_MATRIX := subs( [ _d1 = discriminant1, _d2 = discriminant2 ],
-		proc( M::Matrix(realcons) ) # Matrices are pass by reference, so inplace operations on M will modify the original matrix
-			LinearAlgebra[ColumnOperation]( M, _d1, 1/10, inplace ):
-			LinearAlgebra[ColumnOperation]( M, _d2, 1/10, inplace ):
-		end proc
-	):
-
-	Digits := Precision:
-
-	# Create the matrix represneting the lattice.
-	M := < IdentityMatrix(n) | 10^(Precision-1)*map( evalf, x ) >:
-
-	# Convert the lattice into the equivalent real lattice for LLL.
-	M := < Re(M), -Im(M) | Im(M), Re(M) >:
-
-	# Run the worker function
-	return DO_LLL_INTEGER_RELATION( M, Precision-1 ):
-
 end proc:
 
-# Function to calculate an integer relation using LLL. Saves the time taken.
+# Worker function to calculate an integer relation using LLL.
+# Assumes M is already correctly formatted to find an integer relation.
+# Also assumes the existence of LLL_IS_CANDIDATE(), LLL_FORMAT_CANDIDATE(), and LLL_UPDATE_LATTICE_MATRIX() functions.
+# As such, this function should be called by an initialisation function such as the two above (LLL_INTEGER_RELATION_*()).
 DO_LLL_INTEGER_RELATION := proc( M::Matrix(realcons), K::nonnegint )
 
 	uses IntegerRelations, LinearAlgebra:
@@ -148,7 +174,7 @@ DO_LLL_INTEGER_RELATION := proc( M::Matrix(realcons), K::nonnegint )
 
 	# If we get to this point, then either we found posisble integer relations (for some value of k)
 	# or we got to k=1 without finding any posisble relation.
-	
+
 	# The general output format is either ( {candidates}, [ computation output data ] ) or  ( FAIL, [ computation output data ] )
 	if candidates = {} then
 		# Return FAIL, and an appropriate output data table containing FAIL_info and appropriate LLL computation info.

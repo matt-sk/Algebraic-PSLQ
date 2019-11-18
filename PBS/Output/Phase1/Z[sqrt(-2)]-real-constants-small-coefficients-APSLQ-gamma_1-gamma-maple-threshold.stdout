@@ -1,10 +1,10 @@
-Wed Aug 28 01:28:29 AEST 2019
+Tue Oct 22 18:23:00 AEDT 2019
 
-Linux rcg060 3.10.0-862.6.3.el7.x86_64 #1 SMP Fri Jun 15 17:57:37 EDT 2018 x86_64 x86_64 x86_64 GNU/Linux
+Linux rcg063 3.10.0-862.6.3.el7.x86_64 #1 SMP Fri Jun 15 17:57:37 EDT 2018 x86_64 x86_64 x86_64 GNU/Linux
 
               total        used        free      shared  buff/cache   available
-Mem:           125G         19G         99G        3.2G        6.8G        101G
-Swap:           15G        1.0G         14G
+Mem:           125G        9.2G        110G        3.2G        5.7G        111G
+Swap:           15G        927M         15G
 
 processor	: 0
 vendor_id	: GenuineIntel
@@ -13,7 +13,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2799.896
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -26,7 +26,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -39,7 +39,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2500.885
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -52,7 +52,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -65,7 +65,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2731.250
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -78,7 +78,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -91,7 +91,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2500.183
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -104,7 +104,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -117,7 +117,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2500.183
+cpu MHz		: 2799.896
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -130,7 +130,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -143,7 +143,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2500.323
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -156,7 +156,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -169,7 +169,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2799.896
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -182,7 +182,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -195,7 +195,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2500.744
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -208,7 +208,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -221,7 +221,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2799.896
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -234,7 +234,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -260,7 +260,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -273,7 +273,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2799.896
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -286,7 +286,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -312,7 +312,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -325,7 +325,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2799.896
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -338,7 +338,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -351,7 +351,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2511.694
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -364,7 +364,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -377,7 +377,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.761
+cpu MHz		: 2799.896
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -390,7 +390,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -416,7 +416,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -429,7 +429,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2799.896
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -442,7 +442,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -455,7 +455,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2505.938
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -468,7 +468,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -481,7 +481,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2500.183
+cpu MHz		: 2799.896
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -494,7 +494,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -507,7 +507,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2511.694
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -520,7 +520,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -533,7 +533,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2500.183
+cpu MHz		: 2799.896
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -546,7 +546,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -572,7 +572,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -585,7 +585,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2748.095
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -598,7 +598,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -611,7 +611,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2512.817
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -624,7 +624,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -637,7 +637,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2748.516
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -650,7 +650,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -663,7 +663,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2512.255
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -676,7 +676,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -689,7 +689,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2799.896
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -702,7 +702,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -728,7 +728,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -741,7 +741,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2799.896
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -754,7 +754,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -767,7 +767,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2512.255
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -780,7 +780,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -793,7 +793,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2738.549
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -806,7 +806,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4589.41
+bogomips	: 4589.23
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -819,7 +819,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2511.834
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -832,7 +832,7 @@ fpu_exception	: yes
 cpuid level	: 15
 wp		: yes
 flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts spec_ctrl intel_stibp
-bogomips	: 4593.41
+bogomips	: 4592.98
 clflush size	: 64
 cache_alignment	: 64
 address sizes	: 46 bits physical, 48 bits virtual
@@ -869,4 +869,4 @@ consts := [Pi, Pi , Pi , Pi , Pi , Pi , Pi , Pi , Pi , exp(1), exp(2), exp(3),
 
     sin(4), sin(5), sin(6), sin(7), sin(8), sin(9), ln(2), ln(3), ln(5), ln(7)]
 
-Results/Phase1/Z[sqrt(-2)]-real-constants-small-coefficients-APSLQ-gamma_1-gamma-maple-threshold complete. 77.269 seconds duration. 1000 good examples, 0 unexpected examples, 0 bad examples, 0 fails.
+Results/Phase1/Z[sqrt(-2)]-real-constants-small-coefficients-APSLQ-gamma_1-gamma-maple-threshold complete. 72.058 seconds duration. 1000 good examples, 0 unexpected examples, 0 bad examples, 0 fails.

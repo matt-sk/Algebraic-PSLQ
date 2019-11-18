@@ -1,10 +1,10 @@
-Wed Aug 28 00:29:53 AEST 2019
+Tue Oct 22 18:22:49 AEDT 2019
 
 Linux rcg005 3.10.0-862.6.3.el7.x86_64 #1 SMP Fri Jun 15 17:57:37 EDT 2018 x86_64 x86_64 x86_64 GNU/Linux
 
               total        used        free      shared  buff/cache   available
-Mem:           125G         12G        102G        4.5G         10G        105G
-Swap:           15G        1.6G         14G
+Mem:           125G         15G         95G        5.0G         14G         99G
+Swap:           15G        1.1G         14G
 
 processor	: 0
 vendor_id	: GenuineIntel
@@ -13,7 +13,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2500.042
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -39,7 +39,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2500.183
+cpu MHz		: 2632.562
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -91,7 +91,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2714.123
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -143,7 +143,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2659.375
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -169,7 +169,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2500.183
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -195,7 +195,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2633.404
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -247,7 +247,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2500.042
+cpu MHz		: 2680.712
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -299,7 +299,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2500.183
+cpu MHz		: 2727.880
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -325,7 +325,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2610.803
+cpu MHz		: 2499.902
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -351,7 +351,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2500.042
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -403,7 +403,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2656.005
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -455,7 +455,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2647.863
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -481,7 +481,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2529.522
+cpu MHz		: 2499.902
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -507,7 +507,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2717.913
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -559,7 +559,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2646.740
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -611,7 +611,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2646.740
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -637,7 +637,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2500.183
+cpu MHz		: 2499.902
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -663,7 +663,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2616.137
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -715,7 +715,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2615.997
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -767,7 +767,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2616.137
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -793,7 +793,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.761
+cpu MHz		: 2499.902
 cache size	: 40960 KB
 physical id	: 0
 siblings	: 16
@@ -819,7 +819,7 @@ model		: 63
 model name	: Intel(R) Xeon(R) CPU E5-2698 v3 @ 2.30GHz
 stepping	: 2
 microcode	: 0x3d
-cpu MHz		: 2499.902
+cpu MHz		: 2616.137
 cache size	: 40960 KB
 physical id	: 1
 siblings	: 16
@@ -842,20 +842,19 @@ power management:
 
 Making Results/Phase1/Z[sqrt(-10)]-real-constants-small-coefficients-APSLQ-2.0-gamma-epsilon_minus_3-threshold:
 /cm/software/apps/maple/2018.2/bin/maple -q -c 'PHASE:=1;' -c 'INPUT:=\"Sets/Z[sqrt(-10)]-real-constants-small-coefficients\";' -c 'OUTPUT:=\"Results/Phase1/Z[sqrt(-10)]-real-constants-small-coefficients-APSLQ-2.0-gamma-epsilon_minus_3-threshold\";' -c "PHASE:=1;" -c "Gamma:='2.0';" -c 'THRESHOLD:=epsilon_minus_3;' -c 'ITERATIONS:=10000;' stress-test-APSLQ.mpl
-parameters := table([affix = -10, digits = 1,
+                                     2    3    4    5    6    7    8    9
+parameters := table([consts = [Pi, Pi , Pi , Pi , Pi , Pi , Pi , Pi , Pi ,
 
-                    2    3    4    5    6    7    8    9
-    consts = [Pi, Pi , Pi , Pi , Pi , Pi , Pi , Pi , Pi , exp(1), exp(2),
+    exp(1), exp(2), exp(3), exp(4), exp(5), exp(6), exp(7), exp(8), exp(9),
 
-                                                                        2
-    exp(3), exp(4), exp(5), exp(6), exp(7), exp(8), exp(9), gamma, gamma ,
+                2       3       4       5       6       7       8       9
+    gamma, gamma , gamma , gamma , gamma , gamma , gamma , gamma , gamma ,
 
-         3       4       5       6       7       8       9
-    gamma , gamma , gamma , gamma , gamma , gamma , gamma , sin(1), sin(2),
+    sin(1), sin(2), sin(3), sin(4), sin(5), sin(6), sin(7), sin(8), sin(9),
 
-    sin(3), sin(4), sin(5), sin(6), sin(7), sin(8), sin(9), ln(2), ln(3), ln(5),
+    ln(2), ln(3), ln(5), ln(7)], affix = -10,
 
-    ln(7)]
+    digits = 1
 
     ])
 
@@ -870,4 +869,4 @@ consts := [Pi, Pi , Pi , Pi , Pi , Pi , Pi , Pi , Pi , exp(1), exp(2), exp(3),
 
     sin(4), sin(5), sin(6), sin(7), sin(8), sin(9), ln(2), ln(3), ln(5), ln(7)]
 
-Results/Phase1/Z[sqrt(-10)]-real-constants-small-coefficients-APSLQ-2.0-gamma-epsilon_minus_3-threshold complete. 109.449 seconds duration. 999 good examples, 0 unexpected examples, 0 bad examples, 1 fails.
+Results/Phase1/Z[sqrt(-10)]-real-constants-small-coefficients-APSLQ-2.0-gamma-epsilon_minus_3-threshold complete. 98.822 seconds duration. 999 good examples, 0 unexpected examples, 0 bad examples, 1 fails.

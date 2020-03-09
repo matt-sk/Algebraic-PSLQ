@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# First argument should be the name of a test *set*.
-# We save the base name of the file (since it is the basis of the relevant outputfiles).
-#AFFIX="${1}"
-#BASENAME="Z[sqrt(${AFFIX})]"
+# Arguments should be a list of affixes (numbers). 
+# Each $n will be used to calculate results for Z[sqrt($n)] (using all available test sets for this affix)
 
 get_counts( ) {
 	local RESULTSFILE=${1}
@@ -18,6 +16,8 @@ get_counts( ) {
 # Note that not all of these will exist for any given base file. Any non-existant ones will simply be skipped.
 # The resulting order will make sense for the AFFIX.
 METHODS="CLASSICAL-PSLQ CLASSICAL-LLL REDUCTION-PSLQ REDUCTION-LLL APSLQ-gamma_1-gamma-epsilon-threshold APSLQ-2.0-gamma-epsilon-threshold APSLQ-3.0-gamma-epsilon-threshold APSLQ-4.0-gamma-epsilon-threshold"
+
+echo FIELD CONSTANTS IOTA ${METHODS} | sed 's/ /, /g'
 
 for INPUT_LENGTH in short long; do
 	echo "${INPUT_LENGTH} Input"
@@ -55,6 +55,8 @@ for INPUT_LENGTH in short long; do
 						get_counts Phase2/${INPUT_FILE}-${APPENDIX}-${METHOD}
 
 						printf "& %d&%d&%d&%d " ${GOODCOUNT} ${UNEXPECTEDCOUNT} ${BADCOUNT} ${FAILCOUNT}
+					else
+						printf "& &&& "
 					fi
 				done
 

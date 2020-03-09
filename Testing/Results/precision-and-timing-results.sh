@@ -11,6 +11,8 @@ TEMPFOLDER=$(mktemp -d)
 # Create some FIFO's that will be used for later processing
 mkfifo ${TEMPFOLDER}/TIMING_DATA
 mkfifo ${TEMPFOLDER}/PRECISION_DATA
+mkfifo ${TEMPFOLDER}/RESULT_DATA
+mkfifo ${TEMPFOLDER}/LLL_ATTEMPT_DATA
 
 # Set a trap to remove any temp files that have been created during the processing.
 # Using a trap means that temp files are deleted even if the script ends prematurely.
@@ -76,15 +78,24 @@ for INPUT_FILE in "$@";  do
 
 			# Produce the data columns for the CSV file. (Includes tidying up the METHOD name to make a neater heading).
 			TIDIED_METHOD_NAME="$(echo ${METHOD} | sed 's/-epsilon-threshold$//')"
-			HEADER="${HEADER},${TIDIED_METHOD_NAME} Calculation Time,${TIDIED_METHOD_NAME} Precision"
+			HEADER="${HEADER},${TIDIED_METHOD_NAME} Calculation Time,${TIDIED_METHOD_NAME} Precision,${TIDIED_METHOD_NAME} Result"
 			if [ -r "${RESULTS_FILE}" ]; then
 				# Create each column separately (in the background), and write to a FIFO
 				# We remove any incomplete lines first before processing.
 				sed -e '/[^]][^)]$/d' -e 's/^.* CalculationTime = \([^,]*\).*$/\1/' ${RESULTS_FILE} > $TEMPFOLDER/TIMING_DATA &
 				sed -e '/[^]][^)]$/d' -e 's/^.* PrecisionUsed = \([^,]*\).*$/\1/' ${RESULTS_FILE} > $TEMPFOLDER/PRECISION_DATA &
+				sed -e '/[^]][^)]$/d' -e 's/^.* Result = \([^,]*\).*$/\1/' ${RESULTS_FILE} > $TEMPFOLDER/RESULT_DATA &
+				DATA_FIFOS="${TEMPFOLDER}/TIMING_DATA ${TEMPFOLDER}/PRECISION_DATA $TEMPFOLDER/RESULT_DATA"
+
+				if [ "${TIDIED_METHOD_NAME}" == "LLL" ]; then 
+					HEADER="${HEADER},${TIDIED_METHOD_NAME} Attempts"
+					sed -e '/[^]][^)]$/d' -e 's/^.* `LLL Attempts` = \([^,]*\).*$/\1/' ${RESULTS_FILE} > $TEMPFOLDER/LLL_ATTEMPT_DATA &
+					DATA_FIFOS="${DATA_FIFOS} $TEMPFOLDER/LLL_ATTEMPT_DATA"
+				fi
 
 				# Combine the columns in the FIFO's into CSV columns stored in ${TEMPFILE}
-				paste -d, ${TEMPFOLDER}/TIMING_DATA ${TEMPFOLDER}/PRECISION_DATA > ${TEMPFILE}
+				#paste -d, ${TEMPFOLDER}/TIMING_DATA ${TEMPFOLDER}/PRECISION_DATA > ${TEMPFILE}
+				paste -d, ${DATA_FIFOS} > ${TEMPFILE}
 			else
 				# Create a CSV file of two empty columns.
 				sed 's/^.*$/,/' ${PSLQ_FILE} > ${TEMPFILE} 

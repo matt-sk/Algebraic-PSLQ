@@ -37,7 +37,7 @@ for INPUT_FILE in "$@";  do
 	ID_AND_COUNT_FILE=${TEMPFILE}
 
 	# Extract  Id, Digit Count (Max), and Digit Count (Total) for the input file.
-	maple -q -c "INPUT_FILENAME := \\\"${INPUT_FILE}\\\";" precision-and-timing-results.mpl >> ${ID_AND_COUNT_FILE}
+	maple -s -q -c "INPUT_FILENAME := \\\"${INPUT_FILE}\\\";" precision-and-timing-results.mpl >> ${ID_AND_COUNT_FILE}
 
 	# Extract a second copy of the ID column to append after sorting (later)
 	CreateNewTEMPFILE
@@ -97,8 +97,8 @@ for INPUT_FILE in "$@";  do
 				#paste -d, ${TEMPFOLDER}/TIMING_DATA ${TEMPFOLDER}/PRECISION_DATA > ${TEMPFILE}
 				paste -d, ${DATA_FIFOS} > ${TEMPFILE}
 			else
-				# Create a CSV file of two empty columns.
-				sed 's/^.*$/,/' ${PSLQ_FILE} > ${TEMPFILE} 
+				# Create a CSV file of three empty columns.
+				sed 's/^.*$/,,/' ${PSLQ_FILE} > ${TEMPFILE} 
 			fi
 
 			# It's possible that the contents of the file were incomplete. Pad any files with empty column information.

@@ -6,7 +6,7 @@ read "IntegerRelationFunctions.mpl":
 # SETUP(): Function to run before processing to set up thigns that need setting up.
 # Additionally, this function is responsible for raising any fatal errors that are contingent on the particulars of the test set.
 SETUP := proc( D::integer, coeffDigits::posint )
-	global INTEGER_RELATION_FUNCTION, LLL_INTEGER_RELATION, TEST:
+	global INTEGER_RELATION_FUNCTION, LLL_INTEGER_RELATION, TEST, PRECHECK:
 
 	# The default TEST is REDUCTION_TEST. We over-ride this below in the one case where that is not the case
 	TEST := REDUCTION_TEST:
@@ -15,14 +15,110 @@ SETUP := proc( D::integer, coeffDigits::posint )
 		error "Pointless using REDUCTION method for a classical integer relation":
 	elif INTEGER_RELATION_FUNCTION = LLL_INTEGER_RELATION then
 		if D < 0 then
-			LLL_INTEGER_RELATION := LLL_INTEGER_RELATION_COMPLEX_ALGEBRAIC(D):
+			LLL_INTEGER_RELATION := LLL_INTEGER_RELATION_COMPLEX_ALGEBRAIC(D): # This also covers the complex Classical case.
 
 			# A different reduction is baked into the LLL_INTEGER_RELATION_COMPLEX_ALGEBRAIC function, so we don't need to do it in the TEST function.
 			TEST := DIRECT_TEST: 
 		else
 			LLL_INTEGER_RELATION := LLL_INTEGER_RELATION_REAL_CLASSICAL:
 		end if:
+	elif D < -1 then # (If we get here then we know we're not computing integer relations with LLL, so we must be using PSLQ)
+		# Complex quadratic (non-classical) REDUCTION through PSLQ cases. 
+		# We use the PRECHECK function  to transform candidate relations into the correct integer ring.
+		PRECHECK := COMPLEX_QUADRATIC_PSLQ_PRECHECK_TRANSFORM:
 	end if:	
+end proc:
+
+COMPLEX_QUADRATIC_PSLQ_PRECHECK_TRANSFORM := proc( calc, xx::~list(complexcons), D::integer, Precision::posint )::list;
+	# NOTE: This proc is called from CHECK( ... ), and that function considers only candidates and candidate-specific data.
+	# Any calculation-wide data is stripped off and saved before the call to CHECK( ... ). Consequently we will never see it here.
+	# Consequently, we manipulate (and return) only candidates and candidate-specific data.
+	local Relations, CHK, SqD, candidate, PrecheckData, clobber, sigma_2, idx, a, i, n, failcount:
+
+	# Initialise PrecheckData.
+	PrecheckData := NULL:
+
+	if calc = FAIL then
+		Relations := {}: # Pretty sure this can't happen, but we'll leave it in there anyway, just in case.
+	else
+		# There must be only one candidate integer relation because we only use this function if using PSLQ to calculate the REDUCTION method..
+		CandidateRelation := calc[1][1]:
+		CandidateData     := calc[1][2]:
+
+		# We check to make sure that the elements of the integer relation are, in fact, quadratic integers from the correct sinple quadratic extension field.
+		if type( CandidateRelation, list(SmplCplxQuadInt(D)) ) then # `and`( op(CHK) ) then
+			# We already (and unexpectedly) have all complex quadratic integers. We simply return what we recieved, noting that no transform was applied.
+			Relations := { [ CandidateRelation, [ op(CandidateData), (Transform)=None ] ] }:
+		else
+			# The integers in the candidate relation are from the wrong field (i.e., ℚ(i,√|d|)) and we need to try to transform them.
+
+			# Precalculate SqD for simplicity in the later calculations.
+			SqD := sqrt(abs(D)):
+
+			# ==============
+			# Clobber method
+			# ==============
+			clobber := xi -> coeff(Re(xi), SqD, 0) + coeff(Im(xi), SqD, 1)*I*SqD:
+			candidate[1] := map( clobber, CandidateRelation ):
+
+			# It is possible, but unlikely, that candidate[1] is currently full of 0's.
+			# If this is the case, then the gaussian integer relation given by PSLQ must have been all imaginary only. 
+			# Furthermore, CandidateRelation must consist of quadratic integers multiplied by I. 
+			# We test for thsi and convert candidate[1] appropriately.
+			if type( candidate[1], list(0) ) then candidate[1] = expand( I * CandidateRelation ): fi:
+
+			# Format the candidate and candidate-specific data.
+			candidate[1] := [ candidate[1], [ op(CandidateData), (Transform)=Clobber ] ]:
+
+			# Update PrecheckData with information about 
+			PrecheckData := ( PrecheckData, (`Clobber Candidates`) = 1 ):
+
+			# ============
+			# Sigma method
+			# ============
+			sigma_2 := xi-> coeff(Re(xi), SqD, 0) - coeff(Re(xi), SqD, 1)*SqD - coeff(Im(xi), SqD, 0)*I + coeff(Im(xi), SqD, 1)*I*SqD:
+
+			# In essence, we hope that the value that turns an element into a quadratic integer by multiplication works for the whole vector.
+			# We check every element, keeping all that work.
+			idx, failcount := 2, 0:
+			for i from 1 to nops(CandidateRelation) do
+				a[i] := CandidateRelation[i]:
+				if a[i] = 0 then next: fi: # The following processing is pointless if a[i] = 0.
+
+				# Calcualte the next possible candidate relation.
+				candidate[idx] := expand( sigma_2(a[i]) * CandidateRelation ):
+
+				# Check to see if the relation contains only complex quadratic integers in ℚ(√d), and if so make sure we haven't already seen it.
+				# Save the candidate if both of the above are true.
+				if type( candidate[idx], list(SmplCplxQuadInt(D)) ) then # `and`( op(CHK) ) then 
+					# We have the right types of integers. So we save the candidate (ignoring the possibility it may be a multiple of a previously transformed candidate)
+					candidate[idx] := [ candidate[idx], [ op(CandidateData), (Transform)=Sigma, (`Element Index`)=i ] ]:
+					idx := idx + 1:
+				else 
+					# Count the number of fails, for completeness.
+					failcount := failcount + 1:
+				end if:
+			end do:
+
+			# Clean up after ourselves. If this is defined at all, it cannot be a proper candidate.
+			candidate[idx] := NULL:
+
+			# ========================================
+			# Combine the results from the two methods
+			# ========================================
+
+			# We might have some candidates from the sigma method, and we might not. It's easy to tell.
+			PrecheckData := ( PrecheckData, (`Sigma Candidates`) = idx - 2, (`Sigma Fails`) = failcount, (`Original Candidate Elements`) = nops( CandidateRelation ) ):
+
+			# Collect the new candidates (recall that candidate[idx] is NULL so it does not hurt to have it here)
+			Relations := [ seq( candidate[k], k = 1..idx ) ]: # We make this a list becuase the order is potentially important.
+
+		end if:
+	end if:
+	
+	# Return the relation(s) we have found or modified.
+	return Relations, [ PrecheckData ]:
+
 end proc:
 
 # Function to perform the reduction
@@ -94,29 +190,6 @@ end proc:
 	bIsInteger := type(b, integer);
 
 	return (aIsInteger and bIsInteger and parityIsCorrect);
-end proc:
-
-# POSTCHECK(): Function run after standard results checking is run.
-# This function must return result in {GOOD, UNEXPECTED, BAD, FAIL} to report an outcome, and an output data list.
-POSTCHECK := proc( result, relation, xx::~list(complexcons), D::integer, Precision::posint )
-	local chk:
-
-	# No post-checking needed for real test sets (or even for Gaussian integers, since REDUCTION is pointless in that case)
-	if D >= -1 then return result, []: fi:
-
-	# We only need to do additional checking if the result was not already a FAIL.
-	if result = FAIL then return result, []: fi:
-
-	# We check to make sure that the elements of the integer relation are, in fact, quadratic integers from the correct sinple quadratic extension field.
-	chk := map( type, relation, SmplCplxQuadInt(D) ):
-
-	if `and`( op(chk) ) then
-		# No change to result. Return it with an empty list of output table data.
-		return result, []: # Result should be GOOD, but whatever it is, it's preserved.
-	else
-		# Change the result to FAIL, which we return along with the original result saved as an entry in the output table data.
-		return FAIL, [ (OriginalResult) = result ]:
-	end if:
 end proc:
 
 # Run the tests.

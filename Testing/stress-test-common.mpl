@@ -56,9 +56,9 @@ end if:
 if not assigned( PRECHECK ) then
 	PRECHECK := proc( calc, xx::~list(complexcons), D::integer, Precision::posint )::set;
 		if calc = FAIL then
-			return {}
+			return { }, [ ]
 		else
-			return calc
+			return calc, [ ]
 		end if:
 	end proc:
 end if:
@@ -87,7 +87,7 @@ end if:
 # This function checks the result of a computation.
 # To be passed in for testing.
 CHECK := proc( calc, xx::~list(complexcons), ans::~list(complexcons), D::integer, Precision::posint, $ )
-	local mult, CHK, result, rel, relation, candidate, candidates, candidateSpecificInfo, calcMult, calcRelation, calcCheck, PostCheckData:
+	local mult, CHK, result, rel, relation, candidate, candidates, candidateSpecificInfo, calcMult, calcRelation, calcCheck, PostCheckData, PreCheckData:
 
 	# Initialisation
 	result			:= FAIL:
@@ -96,7 +96,7 @@ CHECK := proc( calc, xx::~list(complexcons), ans::~list(complexcons), D::integer
 	calcCheck		:= NULL:
 
 	# Pre Check
-	candidates := PRECHECK( calc, xx, D, Precision ):
+	candidates, PreCheckData := PRECHECK( calc, xx, D, Precision ):
 
 	if candidates <> {} then
 		# Only perform checking (including POSTCHECK) if the PRECHECK was successful.
@@ -152,7 +152,7 @@ CHECK := proc( calc, xx::~list(complexcons), ans::~list(complexcons), D::integer
 
 	# Return the result along with amalgamated output table data for this CHECK.
 	# Note that some of these may be NULL, in which case they vanish.
-	return result, [ calcMult, calcRelation, calcCheck, candidateSpecificInfo, op(PostCheckData) ]:
+	return result, [ op(PreCheckData), calcMult, calcRelation, calcCheck, candidateSpecificInfo, op(PostCheckData) ]:
 end proc:
 
 CALCULATE_TEST_PROBLEM := proc( xx::~list(complexcons), ans::~list(complexcons), precision::posint, $ )

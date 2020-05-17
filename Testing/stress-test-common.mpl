@@ -87,13 +87,14 @@ end if:
 # This function checks the result of a computation.
 # To be passed in for testing.
 CHECK := proc( calc, xx::~list(complexcons), ans::~list(complexcons), D::integer, Precision::posint, $ )
-	local mult, CHK, result, rel, relation, candidate, candidates, candidateSpecificInfo, calcMult, calcRelation, calcCheck, PostCheckData, PreCheckData:
+	local mult, CHK, rel, bestResult, relation, candidate, candidates, candidateSpecificInfo, calcMult, calcRelation, calcCheck, PostCheckData, PreCheckData:
 
 	# Initialisation
-	result			:= FAIL:
+	bestResult		:= FAIL:
 	calcRelation	:= NULL:
 	calcMult		:= NULL: # Default unless a GOOD result is found, in which case we overwrite this variable.
 	calcCheck		:= NULL:
+	resultList		:= NULL:
 
 	# Pre Check
 	candidates, PreCheckData := PRECHECK( calc, xx, D, Precision ):
@@ -112,47 +113,63 @@ CHECK := proc( calc, xx::~list(complexcons), ans::~list(complexcons), D::integer
 			CHK := expand(relation-ans*mult):
 
 			if convert(CHK,set) = {0} then
-				# New result is GOOD
-				result := GOOD:
-				candidateSpecificInfo := op(candidate[2]):
-				calcMult := (Mult)=mult:
-				calcRelation := (Relation)=relation:
-				calcCheck := NULL:
-				break:
+				# Candidate result is GOOD
+				resultList := resultList, GOOD:
+
+				if bestResult <> GOOD then
+					bestResult := GOOD:
+					candidateSpecificInfo := op(candidate[2]):
+					calcMult := (Mult)=mult:
+					calcRelation := (Relation)=relation:
+					calcCheck := NULL:
+				end if:
 			else
-				# The new result is either UNEXPECTED, or BAD
+				# Candidate result is either UNEXPECTED, or BAD
 				rel := expand( add( xx[k]*relation[k], k=1..nops(xx) ) ):
 				Digits := 1000;
 				CHK := abs( evalf[1000](rel) ):
 
-				if CHK < 10^(-998) and result in {FAIL, BAD} then
-					# New result is UNEXPECTED (only update if old result was BAD or FAIL)
-					result := UNEXPECTED:
-					candidateSpecificInfo := op(candidate[2]):
-					calcRelation := (Relation)=relation:
-					calcCheck := (Check)=CHK:
-					# calcMult is already NULL
-				elif result = FAIL then
-					# New result is BAD (only update if old result was FAIL)
-					result := BAD:
-					candidateSpecificInfo := op(candidate[2]):
-					calcRelation := (Relation)=relation:
-					calcCheck := (Check)=CHK:
-					# calcMult is already NULL
+				if CHK < 10^(-998) then # and result in {FAIL, BAD} then
+					# Candidate result is UNEXPECTED (only update if old result was BAD or FAIL)
+					resultList := resultList, UNEXPECTED:
+					if bestResult in {FAIL, BAD} then
+						bestResult := UNEXPECTED:
+						candidateSpecificInfo := op(candidate[2]):
+						calcRelation := (Relation)=relation:
+						calcCheck := (Check)=CHK:
+						# calcMult is already NULL
+					end if:
+				else #elif result = FAIL then
+					# Candidate result is BAD (only update if old result was FAIL)
+					resultList := resultList, BAD:
+					if bestResult = FAIL then
+						bestResult := BAD:
+						candidateSpecificInfo := op(candidate[2]):
+						calcRelation := (Relation)=relation:
+						calcCheck := (Check)=CHK:
+						# calcMult is already NULL
+					end if:
 				end if:
 			end if:
 		end do:
 
+		# Collate the list of results, but only if there were multiple candidates.
+		if nops(candidates) = 1 then 
+			resultList := NULL
+		else
+			resultList := (`Candidate Results`) = [ resultList ]:
+		end if:
+
 		# Run the POSTCHECK.
-		result, PostCheckData := POSTCHECK( result, rhs(calcRelation), xx, D, Precision ):
+		bestResult, PostCheckData := POSTCHECK( bestResult, rhs(calcRelation), xx, D, Precision ):
 
 		# If we have a GOOD result, then the relation is entirely redundant (but was necessary for the POSTCHECK).
-		if result = GOOD then calcRelation := NULL: fi:
+		if bestResult = GOOD then calcRelation := NULL: fi:
 	end if:
 
 	# Return the result along with amalgamated output table data for this CHECK.
 	# Note that some of these may be NULL, in which case they vanish.
-	return result, [ op(PreCheckData), calcMult, calcRelation, calcCheck, candidateSpecificInfo, op(PostCheckData) ]:
+	return bestResult, [ op(PreCheckData), calcMult, calcRelation, calcCheck, candidateSpecificInfo, resultList, op(PostCheckData) ]:
 end proc:
 
 CALCULATE_TEST_PROBLEM := proc( xx::~list(complexcons), ans::~list(complexcons), precision::posint, $ )

@@ -5,8 +5,10 @@ Testing of Integer Relation calculation algorithms including PSLQ, LLL, and Alge
 This branch contains both an implementation of the APSLQ algorithm (in *Maple*), as well as code to perform (and the results of) experimental mathematical testing of all the above algorithms as published by the author.
 The APSLQ implementation mirrors that found in the master branch.
 
-The results found in this commit are transnational between those reported in the paper: *“Extending the PSLQ Algorithm to Algebraic Integer Relations”* which is published in the Jon Borwein Commemorative Conference proceedings ([DOI: 10.1007/978-3-030-36568-4_26](https://doi.org/10.1007/978-3-030-36568-4_26), or [arXiv preprint](https://arxiv.org/abs/1809.06063)) and the author's soon to be submitted Ph.D thesis “Some Iterative Algorithms in Experimental Mathematics”.
+The results found in this commit are those appearing in the author's Ph.D thesis “Some Iterative Algorithms in Experimental Mathematics” at the time of submission.
 A link to the thesis will be provided if and when it is accepted.
+
+Note that an earlier commit (ae503b91790312271664323d6bcb01917ac29d20, or tag [JBCC](https://github.com/matt-sk/Algebraic-PSLQ/releases/tag/JBCC)) contains the results reported in the paper: *“Extending the PSLQ Algorithm to Algebraic Integer Relations”* published in the Jon Borwein Commemorative Conference proceedings ([DOI: 10.1007/978-3-030-36568-4_26](https://doi.org/10.1007/978-3-030-36568-4_26), or [arXiv preprint](https://arxiv.org/abs/1809.06063)).
 
 ## Reproducing Results
 

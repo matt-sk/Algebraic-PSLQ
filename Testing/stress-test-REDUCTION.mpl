@@ -33,7 +33,7 @@ COMPLEX_QUADRATIC_PSLQ_PRECHECK_TRANSFORM := proc( calc, xx::~list(complexcons),
 	# NOTE: This proc is called from CHECK( ... ), and that function considers only candidates and candidate-specific data.
 	# Any calculation-wide data is stripped off and saved before the call to CHECK( ... ). Consequently we will never see it here.
 	# Consequently, we manipulate (and return) only candidates and candidate-specific data.
-	local Relations, CHK, SqD, candidate, PrecheckData, clobber, sigma_2, idx, a, i, n, failcount:
+	local Relations, CHK, SqD, candidate, PrecheckData, decompose, sigma_2, idx, a, i, n, failcount:
 
 	# Initialise PrecheckData.
 	PrecheckData := NULL:
@@ -55,27 +55,27 @@ COMPLEX_QUADRATIC_PSLQ_PRECHECK_TRANSFORM := proc( calc, xx::~list(complexcons),
 			# Precalculate SqD for simplicity in the later calculations.
 			SqD := sqrt(abs(D)):
 
-			# ==============
-			# Clobber method
-			# ==============
-			clobber := xi -> coeff(Re(xi), SqD, 0) + coeff(Im(xi), SqD, 1)*I*SqD:
-			candidate[1] := map( clobber, CandidateRelation ):
+			# ====================
+			# Decomposition method
+			# ====================
+			decompose := xi -> coeff(Re(xi), SqD, 0) + coeff(Im(xi), SqD, 1)*I*SqD:
+			candidate[1] := map( decompose, CandidateRelation ):
 
 			# It is possible, but unlikely, that candidate[1] is currently full of 0's.
 			# If this is the case, then the gaussian integer relation given by PSLQ must have been all imaginary only. 
 			# Furthermore, CandidateRelation must consist of quadratic integers multiplied by I. 
-			# We test for thsi and convert candidate[1] appropriately.
+			# We test for this and convert candidate[1] appropriately.
 			if type( candidate[1], list(0) ) then candidate[1] = expand( I * CandidateRelation ): fi:
 
 			# Format the candidate and candidate-specific data.
-			candidate[1] := [ candidate[1], [ op(CandidateData), (Transform)=Clobber ] ]:
+			candidate[1] := [ candidate[1], [ op(CandidateData), (Transform)=Decomposition ] ]:
 
 			# Update PrecheckData with information about 
-			PrecheckData := ( PrecheckData, (`Clobber Candidates`) = 1 ):
+			PrecheckData := ( PrecheckData, (`Decomposition Method Candidates`) = 1 ):
 
-			# ============
-			# Sigma method
-			# ============
+			# ================
+			# Conjugate method
+			# ================
 			sigma_2 := xi-> coeff(Re(xi), SqD, 0) - coeff(Re(xi), SqD, 1)*SqD - coeff(Im(xi), SqD, 0)*I + coeff(Im(xi), SqD, 1)*I*SqD:
 
 			# In essence, we hope that the value that turns an element into a quadratic integer by multiplication works for the whole vector.
@@ -92,7 +92,7 @@ COMPLEX_QUADRATIC_PSLQ_PRECHECK_TRANSFORM := proc( calc, xx::~list(complexcons),
 				# Save the candidate if both of the above are true.
 				if type( candidate[idx], list(SmplCplxQuadInt(D)) ) then # `and`( op(CHK) ) then 
 					# We have the right types of integers. So we save the candidate (ignoring the possibility it may be a multiple of a previously transformed candidate)
-					candidate[idx] := [ candidate[idx], [ op(CandidateData), (Transform)=Sigma, (`Element Index`)=i ] ]:
+					candidate[idx] := [ candidate[idx], [ op(CandidateData), (Transform)=Conjugate, (`Element Index`)=i ] ]:
 					idx := idx + 1:
 				else 
 					# Count the number of fails, for completeness.
@@ -107,8 +107,8 @@ COMPLEX_QUADRATIC_PSLQ_PRECHECK_TRANSFORM := proc( calc, xx::~list(complexcons),
 			# Combine the results from the two methods
 			# ========================================
 
-			# We might have some candidates from the sigma method, and we might not. It's easy to tell.
-			PrecheckData := ( PrecheckData, (`Sigma Candidates`) = idx - 2, (`Sigma Fails`) = failcount, (`Original Candidate Elements`) = nops( CandidateRelation ) ):
+			# We might have some candidates from the conjugate method, and we might not. It's easy to tell.
+			PrecheckData := ( PrecheckData, (`Conjugate Method Candidates`) = idx - 2, (`Conjugate Method Fails`) = failcount, (`Original Candidate Elements`) = nops( CandidateRelation ) ):
 
 			# Collect the new candidates (recall that candidate[idx] is NULL so it does not hurt to have it here)
 			Relations := [ seq( candidate[k], k = 1..idx ) ]: # We make this a list becuase the order is potentially important.
